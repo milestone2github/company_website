@@ -42,7 +42,30 @@ Route::get('/mf-performance', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
+Route::view('/about', 'about');
 
 Route::view('/mutual-funds/equity', 'mutual-funds.equity');
 Route::view('/mutual-funds/debt', 'mutual-funds.debt');
 
+// Quick links routes 
+Route::view('/investment-plans', 'quick-links.investement_plans');
+Route::view('/mutual-funds', 'quick-links.mutual_funds');
+Route::get('/retirement-planning', function () {
+    return view('quick-links.retirement_planning');
+});
+Route::get('/tax-saving', function () {
+    return view('quick-links.tax_saving');
+});
+Route::get('/wealth-management', function () {
+    return view('quick-links.wealth_management');
+});
+
+// Important links routes 
+Route::view('/disclaimer', 'disclaimer');
+Route::view('/disclosure', 'disclosure');
+Route::view('/forms', 'forms.index');
+Route::view('/resources', 'resources.index');
+
+// other routes 
+Route::view('/terms', 'terms');
+Route::view('/privacy', 'privacy_policy');

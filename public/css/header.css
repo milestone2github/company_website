@@ -71,6 +71,12 @@
             gap: 8px;
         }
 
+        #mf-items {
+            max-width: 360px;
+        }
+        #mf-items > a{
+            flex-grow: 1;
+        }
         /* Sign In Modal Styles */
         .modal {
             position: absolute;

@@ -25,15 +25,15 @@
                         <a href="#" class="menu-link transition-all duration-300">Mutual Funds</a>
                         <!-- Submenu -->
                         <div class="submenu-modal rounded-lg">
-                            <div class="flex flex-wrap justify-start gap-4 p-4">
+                            <div id='mf-items' class="flex flex-wrap justify-start gap-4 p-2 px-3 max-w-80">
                                 <!-- Submenu Items -->
-                                <a href="/Equity-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Equity MF</a>
-                                <a href="/Debt-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Debt MF</a>
-                                <a href="/Hybrid-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Hybrid MF</a>
-                                </div><div class="flex flex-wrap justify-start gap-4 p-4">
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Latest NFO</a>
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Check KYC</a>
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Top Schemes</a>
+                                <a href="/mutual-funds/equity" class="submenu-item text-black grow flex-shrink-0">Equity MF</a>
+                                <a href="/mutual-funds/debt" class="submenu-item text-black grow flex-shrink-0">Debt MF</a>
+                                <a href="/mutual-funds/hybrid" class="submenu-item text-black grow flex-shrink-0">Hybrid MF</a>
+                                <!-- </div><div class="flex flex-wrap justify-start gap-4 p-4"> -->
+                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Latest NFO</a>
+                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Check KYC</a>
+                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Top Schemes</a>
                             </div>
                         </div>
                     </div>

@@ -1043,7 +1043,7 @@
                     <p id="section-description">{{ $sectionData->description }}</p>
                         <div class="flex flex-col md:flex-row gap-4 mb-10">
                             <button class="button button-get-started">Get Started</button>
-                            <button class="button button-about-us">About Us</button>
+                            <a href='/about' class="button button-about-us">About Us</a>
                         </div>
                         <div class="grid grid-cols-3 gap-4">
                             <div class="text-center">
@@ -1198,7 +1198,7 @@
                 <div class="footer-about">
                     <h4 class="text-xl font-bold mb-4">About mNivesh</h4>
                     <p class="text-gray-400 text-sm">mNivesh is dedicated to helping individuals build a secure financial future. Explore investment plans, mutual funds, and tools tailored to your needs.</p>
-                    <a href="/about-us" class="text-yellow-500 hover:underline mt-4 block">Learn More</a>
+                    <a href="/about" class="text-yellow-500 hover:underline mt-4 block">Learn More</a>
                 </div>
                 
                 <!-- Quick Links Section -->
