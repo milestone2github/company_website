@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BackendStatusController;
 use App\Http\Controllers\ContentController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ServicesController;
+use App\Models\Service;
 
 // API Routes for fetching data
 Route::get('/api/section-one-new', [ContentController::class, 'getSectionOneData']);
@@ -44,8 +47,18 @@ Route::get('/contact', function () {
 });
 Route::view('/about', 'about');
 
-Route::view('/mutual-funds/equity', 'mutual-funds.equity');
-Route::view('/mutual-funds/debt', 'mutual-funds.debt');
+// services routes 
+Route::get('/mutual-funds/equity', [ServicesController::class, 'equityMutualFund']);
+Route::get('/mutual-funds/debt', [ServicesController::class, 'debtMutualFund']);
+Route::get('/mutual-funds/hybrid', [ServicesController::class, 'hybridMutualFund']);
+Route::get('/insurance/life', [ServicesController::class, 'lifeInsurance']);
+Route::get('/insurance/health', [ServicesController::class, 'healthInsurance']);
+// Route::get('/insurance/term', [ServicesController::class, 'termInsurance']);
+// Important links services routes 
+Route::get('/disclaimer', [ServicesController::class, 'disclaimerAndDiscolosure']);
+Route::view('/disclosure', 'disclosure');
+Route::view('/forms', 'forms.index');
+Route::view('/resources', 'resources.index');
 
 // Quick links routes 
 Route::view('/investment-plans', 'quick-links.investement_plans');
@@ -60,11 +73,6 @@ Route::get('/wealth-management', function () {
     return view('quick-links.wealth_management');
 });
 
-// Important links routes 
-Route::view('/disclaimer', 'disclaimer');
-Route::view('/disclosure', 'disclosure');
-Route::view('/forms', 'forms.index');
-Route::view('/resources', 'resources.index');
 
 // other routes 
 Route::view('/terms', 'terms');

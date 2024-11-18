@@ -520,11 +520,6 @@
             color: white;
         }
 
-        #third-section-heading {
-            padding-top: 1rem;
-            margin-bottom: 1rem;
-        }
-
 
         .button:hover {
             transform: translateY(-2px);
@@ -620,13 +615,12 @@
             gap: 0.75rem;
             width: 100%;
             max-width: 1000px;
-            margin: auto;
         }
 
         .large-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
+            gap: 0.8rem;
             width: 85%;
             max-width: 650px;
             margin: 1rem auto 0;
@@ -723,6 +717,10 @@
         }
 
         /* Footer */
+        #section-footer {
+            padding: 4rem 1rem 0rem 1rem;
+            margin: 0;
+        }
         #section-footer .text-gray-400 {
             color: #b8b8b8;
         }
@@ -1120,12 +1118,12 @@
         <!-- Section 3: Stats Section -->
         <section id="section-stats" class="section">
             <div class="container mx-auto">
-                <h3 class="text-4xl font-bold gradient-text mb-8">Our Achievements</h3>
+                <h3 class="text-4xl font-bold gradient-text mb-10 text-center">Our Achievements</h3>
 
                 <!-- Stats Grid - First Row with 4 Columns -->
-                <div class="stats-grid">
+                <div class="stats-grid mx-auto mb-8 md:mb-20">
                     <div class="stats-item-small" id="aum-item">
-                        <div class="label">AUM (</div>
+                        <div class="label">AUM (in Cr)</div>
                         <div class="number" id="aum-number">550</div>
                         <div class="number" id="aum-number"></div>
                     </div>
@@ -1144,7 +1142,7 @@
                 </div>
 
                 <!-- Stats Grid - Second Row with 2 Columns -->
-                <h3 class="text-4xl font-bold gradient-text mb-8" id="third-section-heading">Our CSR and Team Activities</h3>
+                <h3 class="text-4xl text-center font-bold gradient-text mb-10" id="third-section-heading">Our CSR and Team Activities</h3>
                 <div class="large-stats-grid">
                     <div class="stats-item slideshow-item" id="csr-slideshow">
                         <div class="slideshow-container" id="csr-slideshow-container">
@@ -1174,7 +1172,7 @@
                         <a href="/all-blogs" class="block text-center text-yellow-500 font-bold text-lg hover:underline">View All Blogs</a>
                     </div>
                 </div>
-        </selection>
+        </section>
         <section id="section-magazine" class="section bg-gray-100">
             <div class="container mx-auto text-center">
                 <!-- Magazines Section -->
@@ -1191,7 +1189,7 @@
                 </div>
             </div>
         </section>
-        <footer id="section-footer" class="section bg-gray-900 text-white py-12">
+        <footer id="section-footer" class="section bg-gray-900 text-white">
             <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
                 
                 <!-- About Us Section -->
@@ -1217,8 +1215,7 @@
                 <div class="footer-important-links">
                     <h4 class="text-xl font-bold mb-4">Important Links</h4>
                     <ul class="text-gray-400 space-y-2">
-                        <li><a href="/disclaimer" class="hover:text-yellow-500">Disclaimer</a></li>
-                        <li><a href="/disclosure" class="hover:text-yellow-500">Disclosure</a></li>
+                        <li><a href="/disclaimer" class="hover:text-yellow-500">Disclosure & Disclaimer</a></li>
                         <li><a href="/forms" class="hover:text-yellow-500">Forms</a></li>
                         <li><a href="/resources" class="hover:text-yellow-500">Resources</a></li>
                     </ul>

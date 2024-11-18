@@ -30,10 +30,9 @@
                                 <a href="/mutual-funds/equity" class="submenu-item text-black grow flex-shrink-0">Equity MF</a>
                                 <a href="/mutual-funds/debt" class="submenu-item text-black grow flex-shrink-0">Debt MF</a>
                                 <a href="/mutual-funds/hybrid" class="submenu-item text-black grow flex-shrink-0">Hybrid MF</a>
-                                <!-- </div><div class="flex flex-wrap justify-start gap-4 p-4"> -->
-                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Latest NFO</a>
+                                <!-- <a href="#" class="submenu-item text-black grow flex-shrink-0">Latest NFO</a>
                                 <a href="#" class="submenu-item text-black grow flex-shrink-0">Check KYC</a>
-                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Top Schemes</a>
+                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Top Schemes</a> -->
                             </div>
                         </div>
                     </div>
@@ -61,9 +60,9 @@
                         <div class="submenu-modal rounded-lg">
                             <div class="flex flex-wrap justify-start gap-4 p-4">
                                 <!-- Submenu Items -->
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
-                                <a href="#" class="submenu-item text-black flex-shrink-0">Term Insurance</a>
+                                <a href="/insurance/life" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
+                                <a href="/insurance/health" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
+                                <!-- <a href="/insurance/term" class="submenu-item text-black flex-shrink-0">Term Insurance</a> -->
                             </div>
                         </div>
                     </div>

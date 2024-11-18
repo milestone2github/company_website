@@ -41,6 +41,9 @@
             text-align: center; /* Ensure text is centered */
         }
 
+        .submenu-item:hover {
+            text-decoration: underline;
+        }
         /* Submenu modal spans total width of main menu */
         .submenu-modal {
             position: absolute;
