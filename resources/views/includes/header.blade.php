@@ -96,12 +96,12 @@
                     class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
                     Get Started
                 </button> -->
-            <a href="https://mnivesh.investwell.app/app/#/public/signup/1"
+                <a href="https://mnivesh.investwell.app/app/#/login"
                 target="_blank"
                 class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
                 Sign In
             </a>
-            <a href="https://mnivesh.investwell.app/app/#/login"
+            <a href="https://mnivesh.investwell.app/app/#/public/signup/1"
                 target="_blank"
                 class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
                 Get Started
