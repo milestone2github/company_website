@@ -9,7 +9,6 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "microsoft/azure-storage-blob": "^1.5",
-        "fruitcake/laravel-cors": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
