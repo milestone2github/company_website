@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Blog;
 use Carbon\Carbon;
-
-
+use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller
 {
@@ -85,16 +84,18 @@ class ContentController extends Controller
     // Section 4: Blogs
     public function getBlogs()
     {
-        $blogs = DB::table('blog_new')
-            ->select('title', 'image_url', 'content', 'description', 'author', 'post_date', 'slug')
+        $blogs = DB::table('blogs')
+            ->select('title', 'image', 'description', 'author', 'date', 'slug')
             ->inRandomOrder()
             ->limit(3)
             ->get()
             ->map(function ($blog) {
-                $blog->post_date = Carbon::parse($blog->post_date)->format('d-M-Y'); // Format the date
+                $blog->date = Carbon::parse($blog->date)->format('d-M-Y'); // Format the date
                 return $blog;
             });
     
+        // Log the blogs
+        Log::info('Fetched blogs:', $blogs->toArray());
         return response()->json($blogs); // Return JSON response
     }
     

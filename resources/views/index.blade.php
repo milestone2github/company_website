@@ -454,7 +454,7 @@
             align-items: center;
             padding: 4rem 1rem;
             background-color: #101211; /* Default dark background */
-            color: #fff;
+            /* color: #fff; */
         }
 
         /* Section-Specific Backgrounds */
@@ -680,6 +680,10 @@
         }
 
         /* Blog and Magazine Image Styles */
+        .magazine-card {
+            min-height: 320px;
+            min-width: 272px;
+        }
         .blog-card img,
         .magazine-card img {
             width: 100%;
@@ -889,7 +893,7 @@
         async function loadBlogs() {
             const response = await fetch('/api/blogs'); // Replace with actual API endpoint
             const blogs = await response.json();
-            // console.log('blogs: ', blogs)
+            console.log('blogs: ', blogs)
 
             const blogContainer = document.querySelector("#section-blogs .grid");
 
@@ -898,11 +902,11 @@
                 blogCard.classList.add("blog-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden");
 
                 blogCard.innerHTML = `
-                    <img src="${blog.image_url}" alt="Blog Image" class="w-full h-48 object-cover">
+                    <img src="${blog.image}" alt="Blog Image" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h4 class="text-xl font-bold mb-2">${blog.title}</h4>
-                        <p class="text-gray-700 text-sm mb-4">${blog.description}</p>
-                        <p class="text-gray-500 text-xs">By ${blog.author} • ${blog.post_date}</p>
+                        <p class="text-gray-700 text-sm mb-4">${blog.description.slice(0, 140) + ' ...'}</p>
+                        <p class="text-gray-500 text-xs">By ${blog.author} • ${blog.date}</p>
                         <a href="/${blog.slug}" class="block mt-4 text-yellow-500 font-semibold hover:underline">Read More</a>
                     </div>
                 `;
@@ -925,7 +929,7 @@
 
             magazines.forEach(magazine => {
                 const magazinecard = document.createElement("div");
-                magazinecard.classList.add("magazine-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden");
+                magazinecard.classList.add("magazine-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden", "px-8");
 
                 magazinecard.innerHTML = `
                     <img src="${magazine.image_url}" alt="Magazine Image" class="w-full h-32 object-cover">
@@ -1040,7 +1044,8 @@
                     <h2 class="text-5xl font-bold mb-6 gradient-text" id="section-title">{{ $sectionData->title }}</h2>
                     <p id="section-description">{{ $sectionData->description }}</p>
                         <div class="flex flex-col md:flex-row gap-4 mb-10">
-                            <button class="button button-get-started">Get Started</button>
+                            <a href="https://mnivesh.investwell.app/app/#/login" target="_blank" class="button button-get-started">Get Started</a>
+                            <!-- <button class="button button-get-started">Get Started</button> -->
                             <a href='/about' class="button button-about-us">About Us</a>
                         </div>
                         <div class="grid grid-cols-3 gap-4">
@@ -1069,11 +1074,10 @@
 
 
         <!-- Section 2: Our Offerings -->
-        <section id="section-our-offerings" class="section">
+        <!-- <section id="section-our-offerings" class="section">
             <div class="container mx-auto">
                 <h3 class="text-4xl font-bold gradient-text mb-8">Our Offerings</h3>
                 <div class="content-grid">
-                    <!-- Left Column with Grid Items -->
                     <div class="grid grid-cols-2 gap-4" id="offering-container">
                         <div class="offerings-grid-item" data-title="Investment Plans" data-description="Choose from a variety of investment plans designed to suit your financial goals." data-image="{{ asset('images/investment_plan.png') }}" data-image="/1234">
                             Investment Plans
@@ -1095,25 +1099,23 @@
                         </div>
                     </div>
 
-                    <!-- Vertical Line Between Columns -->
                     <div class="vertical-line hidden md:block"></div>
 
-                    <!-- Right Column with Dynamic Content Frame -->
                     <div id="dynamic-content" class="p-6 border rounded-lg shadow-lg w-full">
                         <h3 class="text-3xl font-bold mb-4" id="frame-title">Select an Offering</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                            <!-- Left Side: Description and Button -->
+                            
                             <div class="flex flex-col">
                                 <p class="text-lg mb-4" id="frame-description">Please select an offering from the left to see more details here.</p>
                                 <a href="#" class="button button-learn-more mt-6">Learn More</a>
                             </div>
-                            <!-- Right Side: Image -->
+
                             <img src="" alt="" id="frame-image" class="max-w-full h-auto">
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- Section 3: Stats Section -->
         <section id="section-stats" class="section">
@@ -1179,11 +1181,12 @@
                 <h3 class="text-4xl font-bold gradient-text mb-6">Latest Magazines</h3>
                 <p class="text-lg text-gray-600 mb-8">Browse our collection of insightful magazines covering various financial topics.</p>
                 
-                <div id='magazine-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- <div id='magazine-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center  border"> -->
+                <div id='magazine-container' class="flex flex-wrap min-w-80 gap-8 justify-center">
                     <!-- Magazine Card 1 -->
 
                     <!-- View All Magazines Card -->
-                    <div class="magazine-card bg-white rounded-lg shadow-lg overflow-hidden flex items-center justify-center">
+                    <div class="magazine-card px-8 bg-white rounded-lg shadow-lg overflow-hidden flex items-center justify-center">
                         <a href="/all-magazines" class="block text-center text-yellow-500 font-bold text-lg hover:underline">View All Magazines</a>
                     </div>
                 </div>
