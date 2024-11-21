@@ -88,19 +88,19 @@
 
         <!-- Buttons -->
         <div class="space-x-4 flex">
-            <!-- <button onclick="openSignInModal()"
-                    class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
-                    Sign In
-                </button>
-                <button
-                    class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
-                    Get Started
-                </button> -->
-                <a href="https://mnivesh.investwell.app/app/#/login"
+            <button onclick="openSignInModal()"
+                class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
+                Sign In
+            </button>
+            <!-- <button
+                class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
+                Get Started
+            </button> -->
+            <!-- <a href="https://mnivesh.investwell.app/app/#/login"
                 target="_blank"
                 class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
                 Sign In
-            </a>
+            </a> -->
             <a href="https://mnivesh.investwell.app/app/#/public/signup/1"
                 target="_blank"
                 class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
@@ -110,7 +110,7 @@
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <nav id="mobileMenu" class="mobile-menu md:hidden">
+    <nav id="mobileMenu" class="hidden md:hidden">
         <!-- Mutual Funds -->
         <div class="border-b border-gray-700">
             <button onclick="toggleSubmenu('mobile-submenu-mutual-funds')" class="w-full text-left px-4 py-2 menu-link flex justify-between items-center">
@@ -126,6 +126,65 @@
                     <a href="#" class="text-black px-2 py-1">Equity</a>
                     <a href="#" class="text-black px-2 py-1">Debt</a>
                     <a href="#" class="text-black px-2 py-1">Hybrid</a>
+                </div>
+            </div>
+        </div>
+        <!-- FD and Bonds -->
+        <div class="border-b border-gray-700">
+            <button onclick="toggleSubmenu('mobile-submenu-fd-bonds')" class="w-full text-left px-4 py-2 menu-link flex justify-between items-center">
+                FD and Bonds
+                <!-- Arrow Icon -->
+                <svg class="w-4 h-4 transition-transform" id="arrow-mobile-submenu-fd-bonds" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414L10 13.414 5.293 8.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div id="mobile-submenu-fd-bonds" class="submenu-hidden bg-yellow-500 bg-opacity-50">
+                <div class="flex flex-col p-2">
+                    <!-- Submenu Items -->
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Bank FD</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Corporate FD</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Bonds</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Government</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Corporate</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Tax-Free</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insurance -->
+        <div class="border-b border-gray-700">
+            <button onclick="toggleSubmenu('mobile-submenu-insurance')" class="w-full text-left px-4 py-2 menu-link flex justify-between items-center">
+                Insurance
+                <!-- Arrow Icon -->
+                <svg class="w-4 h-4 transition-transform" id="arrow-mobile-submenu-insurance" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414L10 13.414 5.293 8.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div id="mobile-submenu-insurance" class="submenu-hidden bg-yellow-500 bg-opacity-50">
+                <div class="flex flex-col p-2">
+                    <!-- Submenu Items -->
+                    <a href="/insurance/life" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
+                    <a href="/insurance/health" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
+                    <a href="/insurance/term" class="submenu-item text-black flex-shrink-0">Term Insurance</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock market -->
+        <div class="border-b border-gray-700">
+            <button onclick="toggleSubmenu('mobile-submenu-stock-market')" class="w-full text-left px-4 py-2 menu-link flex justify-between items-center">
+                Stock Market
+                <!-- Arrow Icon -->
+                <svg class="w-4 h-4 transition-transform" id="arrow-mobile-submenu-stock-market" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414L10 13.414 5.293 8.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div id="mobile-submenu-stock-market" class="submenu-hidden bg-yellow-500 bg-opacity-50">
+                <div class="flex flex-col p-2">
+                    <!-- Submenu Items -->
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Intn'l Stock Market</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Domestic Stock Market</a>
+                    <a href="#" class="submenu-item text-black flex-shrink-0">Unlisted Securities</a>
                 </div>
             </div>
         </div>
@@ -148,7 +207,10 @@
             <div class="text-center mt-4">or</div>
             <div class="text-center mt-4 font-bold" id="sign-in-with-text">Sign in with</div>
             <div class="sso-icons">
-                <img src="{{ asset('images/google-logo.png') }}" onclick="googleSso()" alt="Google" class="sso-icon" id="google-logo">
+                <a href="{{ route('auth.google') }}" class="">
+                    <img src="{{ asset('images/google-logo.png') }}" alt="Google" class="sso-icon" id="google-logo">
+                </a>
+
                 <img src="{{ asset('images/zoho-logo.png') }}" onclick="zohoSso()" alt="Zoho" class="sso-icon" id="zoho-logo" style="width: 40px; height: 25px;">
                 <img src="{{ asset('images/yahoo-logo.png') }}" onclick="yahooSso()" alt="Yahoo" class="sso-icon" id="yahoo-logo">
                 <img src="{{ asset('images/apple-logo.png') }}" onclick="appleSso()" alt="Apple" class="sso-icon" id="apple-logo" style="width: 30px; height: 40px;">

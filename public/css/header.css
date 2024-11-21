@@ -14,13 +14,13 @@
             .desktop-menu {
                 display: none;
             }
-            .mobile-menu {
+            /* .mobile-menu {
                 display: block;
-            }
+            } */
         }
-        .mobile-menu {
+        /* .mobile-menu {
             display: none;
-        }
+        } */
 
         /* Custom styles for the "Get Started" button */
         .get-started-button {
