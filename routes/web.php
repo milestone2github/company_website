@@ -7,6 +7,41 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ServicesController;
 use App\Models\Service;
 
+use App\Http\Controllers\Auth\GoogleController;
+use Illuminate\Support\Facades\DB;
+
+// routes for login with google 
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+Route::get('/test-mongodb', function () {
+    try {
+        // Test connection by fetching the first document from the 'MintDb' collection
+        $document = DB::connection('mongodb')->collection('MintDb')->first();
+    
+        if ($document) {
+            // Replace any NaN or Infinity values in the document
+            array_walk_recursive($document, function (&$value) {
+                if (is_numeric($value) && (is_nan($value) || is_infinite($value))) {
+                    $value = null; // Replace with a value like null
+                }
+            });
+        }
+    
+        return response()->json([
+            'status' => 'success',
+            'document' => $document,
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ]);
+    }
+    
+});
+
 // API Routes for fetching data
 Route::get('/api/section-one-new', [ContentController::class, 'getSectionOneData']);
 Route::get('/api/offerings', [ContentController::class, 'getOfferings']);
