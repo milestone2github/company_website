@@ -202,7 +202,7 @@
                 <img src="{{ asset('images/cross-icon.png') }}" alt="Sign In Icon" class="sign-in-icon">
                 <h2 class="text-2xl font-bold">Sign In</h2>
             </div>
-            <input type="text" placeholder="Mobile or Email" class="w-full p-2 mb-4 border border-gray-300 rounded-md">
+            <input type="text" placeholder="Mobile" class="w-full p-2 mb-4 border text-gray-900 border-gray-300 rounded-md">
             <button onclick="sendOTP()" class="bg-yellow-500 text-black w-full py-2 rounded-md">Send OTP</button>
             <div class="text-center mt-4">or</div>
             <div class="text-center mt-4 font-bold" id="sign-in-with-text">Sign in with</div>
@@ -235,7 +235,7 @@
                 <input type="text" maxlength="1" class="otp-input" placeholder="*">
                 <input type="text" maxlength="1" class="otp-input" placeholder="*">
             </div>
-            <button class="bg-yellow-500 text-black w-full py-2 rounded-md mb-2" onclick="verifyOTP()">Verify OTP</button>
+            <button id="verify-otp" class="bg-yellow-500 text-black w-full py-2 rounded-md mb-2" onclick="verifyOTP()">Verify OTP</button>
             <button class="bg-gray-500 text-white w-full py-2 rounded-md" onclick="resendOTP()">Resend OTP</button>
         </div>
     </div>

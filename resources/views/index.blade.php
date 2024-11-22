@@ -1,423 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Meta Tags and Title -->
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mNivesh</title>
 
     <!-- Tailwind CSS via CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
     <!-- Custom Styles -->
-    <!-- <style>
-        /* General Styles */
-        html, body {
-            scroll-behavior: smooth;
-            margin: 0;
-            height: 100%;
-            overflow: hidden; /* Prevent default scrolling */
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-
-        #section-description{
-            color:#fff;
-            padding-bottom: 1rem;
-        }
-
-        /* Scroll container */
-        .scroll-container {
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
-            height: 100vh; /* Full viewport height */
-        }
-
-        /* Each section */
-        .section {
-            scroll-snap-align: start;
-            min-height: 100vh; /* Each section takes full viewport height */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 4rem 1rem;
-        }
-
-        /* Background colors for sections */
-        #section-main-content {
-            background-color: #101211; /* Light background */
-        }
-
-        #section-our-offerings {
-            background-color: #101211; /* Gray background */
-        }
-
-        #section-stats {
-            background-color: #101211; /* Light gray background */
-        }
-
-        #section-blogs {
-            background-color: #101211 !important;/* Light background color for the blog section */
-             /* Padding to add spacing at the top and bottom */
-        }
-
-        #section-magazine {
-            background-color: #101211
-        }
-
-        /* Set width and height for image */
-        #amfilogo {
-            width: 100px;  /* Initial width */
-            height: auto;  /* Maintain aspect ratio */
-        }
-
-        /* Media query for larger screens */
-        @media (min-width: 768px) {
-            #amfilogo {
-                width: 150px;  /* Larger width for larger screens */
-            }
-        }
-
-         /* Adjusted positioning for the AMFI logo */
-         .top-right-logo {
-            position: fixed; /* Use fixed positioning to align relative to the viewport */
-            top: calc(4rem + 1rem); /* Adjust top position to account for header height */
-            right: 1rem;
-            z-index: 49; /* Ensure the logo is above other content */
-        }
-
-        .gradient-text {
-            background: linear-gradient(to bottom right, #fff, #fff0d1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* set white colour to main content text description*/
-        #main-content-text {
-            color: #f0f0f0; /* Off-white color */
-        }
-
-        /* Button styling */
-        .button {
-            white-space: nowrap;
-            border-radius: 0.5rem;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 0.5rem 1rem;
-            transition: all 0.3s ease;
-        }
-
-        /* Specific button colors */
-        .button-get-started {
-            background-color: #4f46e5;
-            color: white;
-        }
-
-        .button-about-us {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        /* Hover effects */
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Ensure the left and right columns are centered */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 2fr 1px 3fr; /* Left column takes 2fr, right column 3fr */
-            gap: 1rem;
-            align-items: center; /* Vertically center-align items */
-            width: 100%;
-        }
-
-        /* Ensure the left-side offerings grid is centered */
-        #offering-container {
-            align-self: center; /* Vertically center-align the offerings grid */
-        }
-
-        /* Ensure the dynamic-content is also centered */
-        #dynamic-content {
-            align-self: center; /* Vertically center-align the dynamic content */
-        }
-
-        .offerings-grid-item {
-            height: calc(16.67vh - 1rem); /* Each item takes up a third of the 75% height, minus gap */
-            padding: 0.5rem;
-            background-color: #e5e7eb;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-weight: bold;
-            white-space: normal;
-            overflow-wrap: break-word;
-        }
-
-        /* Image styling */
-        #frame-image {
-            max-height: 300px; /* Increase image size */
-            width: 100%; /* Make image responsive to column width */
-            object-fit: cover; /* Ensure image fills the container while maintaining aspect ratio */
-            border-radius: 0.5rem; /* Optional: Rounded corners */
-            align-self: center; /* Center image horizontally */
-            margin-top: 1rem;
-        }
-        #frame-description {
-            margin-bottom: 1rem; /* Space between the description and button */
-            color: #333;
-            margin-top: 0; /* Text color */
-        }
-
-        .offerings-grid-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .vertical-line {
-            width: 2px;
-            background-color: #ff0;
-            height: 75%;
-            align-self: center;
-        }
-
-        /* Adjust the padding to move content higher */
-        /* Right Column: Dynamic Content */
-        #dynamic-content {
-            padding: 1.5rem;
-            background-color: #f8fafc;
-            border-radius: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 50vh; /* Adjusted minimum height to match left column */
-            max-height: 60vh; /* Set an upper limit to prevent overflow */
-            height: 60vh; /* Fixed height for consistency */
-            box-sizing: border-box;
-        }
-
-        /* Align items to the top within the grid */
-        #dynamic-content .grid {
-            align-items: center; /* Vertically center items within the grid */
-        }
-
-        /* Highlighted offerings grid item */
-        .highlighted {
-            box-shadow: 0 0 20px 5px #ffd700;
-        }
-
-        /* Stats Section */
-        /* General section styling to ensure it fits within the viewport */
-        .section {
-            scroll-snap-align: start;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem 1rem;
-            box-sizing: border-box;
-        }
-
-        /* Stats Section */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Four columns for the first row */
-            gap: 0.75rem;
-            width: 100%;
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        .large-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Two columns for the second row */
-            gap: 0.5rem;
-            width: 100%;
-            max-width: 1000px;
-            margin: 1rem auto 0 auto;
-        }
-
-        /* Stats Item Styling */
-        .stats-item {
-            background: linear-gradient(135deg, #ffffff, #f0f4ff);
-            padding: 0.5rem; /* Reduced padding for compact fit */
-            border-radius: 1rem;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            aspect-ratio: 1 / 1;
-        }
-
-        .stats-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .label {
-            font-size: 1.25rem; /* Adjusted font size */
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #4f46e5, #7f93f5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-
-        .number {
-            font-size: 2rem; /* Adjusted font size */
-            font-weight: 900;
-            background: linear-gradient(45deg, #3b82f6, #00c4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: color 0.3s ease;
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
-            }
-            .large-stats-grid {
-                grid-template-columns: 1fr; /* One column on medium screens */
-            }
-        }
-
-        @media (max-width: 640px) {
-            .stats-grid, .large-stats-grid {
-                grid-template-columns: 1fr; /* One column on small screens */
-            }
-        }
-
-        .grayscale-img {
-            filter: grayscale(100%);
-            max-height: 4rem;
-        }
-
-        /* Slideshow container styling */
-        .slideshow-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .slideshow-image {
-            opacity: 0;
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-            object-fit: contain; /* Maintain aspect ratio without cropping */
-            border-radius: 0.5rem;
-            transition: opacity 0.5s ease-in-out;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Center the image within the container */
-        }
-
-        .slideshow-image.active {
-            opacity: 1;
-        }
-
-
-
-
-        /* Additional padding for third section heading */
-        #third-section-heading {
-            padding-top: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Blog Section */
-        .blog-card {
-            transition: transform 0.3s ease;
-        }
-
-        .blog-card:hover {
-            transform: translateY(-5px); /* Lift effect on hover */
-        }
-
-        /* Blog and Magazine Image Styles */
-        .blog-card img,
-        .magazine-card img {
-            width: 100%;         /* Full width of container */
-            height: auto;        /* Maintain aspect ratio */
-            max-height: 200px;   /* Set a max height as per your layout */
-            object-fit: contain;   /* Crop to fit container without distortion */
-            border-radius: 0.5rem; /* Optional rounded corners */
-            display: block;
-            margin: 0 auto;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-            #section-blogs .grid {
-                grid-template-columns: 1fr; /* Single column on small screens */
-            }
-        }
-
-        #section-footer .text-gray-400 {
-            color: #b8b8b8;
-        }
-
-        #section-footer .text-yellow-500:hover {
-            color: #ffc44d;
-        }
-
-        #section-footer a {
-            transition: color 0.3s ease;
-        }
-
-        #section-footer i {
-            font-size: 1.5rem;
-        }
-
-        .button-container {
-            padding-top: 1rem; /* Adds space above the button */
-            padding-bottom: 1rem; /* Additional padding at the bottom */
-            display: flex;
-            justify-content: center; /* Center align the button */
-        }
-
-        /* Button and Image in Right Column */
-        /* Button Styling */
-        .button-learn-more {
-            background-color: #ffd700; /* Yellow background */
-            color: black;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            text-align: center;
-            margin-top: auto; /* Keep button at the bottom */
-            align-self: flex-start; /* Align button on the left */
-        }
-        .button-learn-more:hover {
-            background-color: #ccac00; /* Darker yellow on hover */
-        }
-
-
-
-
-    </style> -->
-
     <style>
         /* Basic Resets */
         * {
@@ -426,10 +23,12 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             scroll-behavior: smooth;
             height: 100%;
-            overflow: hidden; /* Prevent default scrolling */
+            overflow: hidden;
+            /* Prevent default scrolling */
         }
 
         body {
@@ -441,20 +40,28 @@
         .scroll-container {
             scroll-snap-type: y mandatory;
             overflow-y: scroll;
-            height: 100vh; /* Full viewport height */
+            height: 100vh;
+            /* Full viewport height */
         }
 
         /* Section Styling */
         .section {
             scroll-snap-align: center;
-            min-height: 100vh; /* Full viewport height */
+            min-height: 100vh;
+            /* Full viewport height */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 4rem 1rem;
-            background-color: #101211; /* Default dark background */
+            background-color: #101211;
+            /* Default dark background */
             /* color: #fff; */
+        }
+
+        footer.section {
+            min-height: fit-content;
+            padding: 1rem 1rem;
         }
 
         /* Section-Specific Backgrounds */
@@ -479,7 +86,8 @@
         }
 
         #main-content-text {
-            color: #f0f0f0; /* Off-white color */
+            color: #f0f0f0;
+            /* Off-white color */
         }
 
         /* Logo */
@@ -529,7 +137,8 @@
         /* Grid Layouts */
         .content-grid {
             display: grid;
-            grid-template-columns: 2fr 1px 3fr; /* Left 2fr, right 3fr */
+            grid-template-columns: 2fr 1px 3fr;
+            /* Left 2fr, right 3fr */
             gap: 1rem;
             align-items: center;
             width: 100%;
@@ -541,7 +150,8 @@
         }
 
         .offerings-grid-item {
-            height: calc(16.67vh - 1rem); /* Item height */
+            height: calc(16.67vh - 1rem);
+            /* Item height */
             padding: 0.5rem;
             background-color: #e5e7eb;
             border: 1px solid #d1d5db;
@@ -589,7 +199,8 @@
         }
 
         #frame-title {
-            color: #000; /* Set black color for the dynamic content title */
+            color: #000;
+            /* Set black color for the dynamic content title */
         }
 
         /* Image Styling */
@@ -641,7 +252,8 @@
         }
 
         .stats-item-small {
-            height: 150px; /* Reduced height */
+            height: 150px;
+            /* Reduced height */
             background: linear-gradient(135deg, #ffffff, #f0f4ff);
             padding: 0.5rem;
             border-radius: 1rem;
@@ -684,6 +296,7 @@
             min-height: 320px;
             min-width: 272px;
         }
+
         .blog-card img,
         .magazine-card img {
             width: 100%;
@@ -697,7 +310,8 @@
 
         .blog-card h4,
         .magazine-card h4 {
-            color: #000; /* Set black color for the blog and magazine titles */
+            color: #000;
+            /* Set black color for the blog and magazine titles */
         }
 
 
@@ -706,15 +320,19 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
             .large-stats-grid {
                 grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 640px) {
-            .stats-grid, .large-stats-grid {
+
+            .stats-grid,
+            .large-stats-grid {
                 grid-template-columns: 1fr;
             }
+
             #section-blogs .grid {
                 grid-template-columns: 1fr;
             }
@@ -725,6 +343,7 @@
             padding: 4rem 1rem 0rem 1rem;
             margin: 0;
         }
+
         #section-footer .text-gray-400 {
             color: #b8b8b8;
         }
@@ -800,94 +419,92 @@
         .slideshow-image.active {
             opacity: 1;
         }
-
     </style>
 
     <!-- Scripts -->
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            init(); // Initialize all functionalities.
 
-    document.addEventListener("DOMContentLoaded", function() {
-        init(); // Initialize all functionalities.
-
-        function init() {
-            loadOfferings().then(() => {
-                attachClickHandlersToOfferings();
-                setTimeout(() => {
-                    highlightInitialOffering(); // Initial delay before starting automatic highlighting
-                    startAutomaticHighlighting();
-                }, 5000); // 5 seconds delay before first automatic highlight
-            });
-        }
-
-        async function loadOfferings() {
-            const response = await fetch('/api/offerings');
-            const offerings = await response.json();
-            // console.log('offerings: ', offerings)
-            const offeringsContainer = document.getElementById("offering-container");
-            offeringsContainer.innerHTML = ''; // Clear existing entries
-            offerings.forEach(offering => {
-                const div = document.createElement("div");
-                div.className = 'offerings-grid-item bg-white rounded-lg shadow-lg overflow-hidden';
-                div.setAttribute('data-title', offering.title);
-                div.setAttribute('data-description', offering.description);
-                div.setAttribute('data-image', offering.image_url);
-                div.setAttribute('data-slug', offering.button_link); // Assuming each offering has a direct link
-                div.textContent = offering.title;
-                offeringsContainer.appendChild(div);
-            });
-        }
-
-        function attachClickHandlersToOfferings() {
-            const offeringsContainer = document.getElementById("offering-container");
-            offeringsContainer.addEventListener("click", function(event) {
-                const target = event.target.closest('.offerings-grid-item');
-                if (target) {
-                    highlightItem(target);
-                    updateDynamicContent(target);
-                }
-            });
-        }
-
-        function highlightItem(item) {
-            document.querySelectorAll('.offerings-grid-item').forEach(offer => {
-                offer.classList.remove('highlighted');
-            });
-            item.classList.add('highlighted');
-        }
-
-        function updateDynamicContent(item) {
-            const frameTitle = document.getElementById("frame-title");
-            const frameDescription = document.getElementById("frame-description");
-            const frameImage = document.getElementById("frame-image");
-            const learnMoreLink = document.querySelector("#dynamic-content .button-learn-more");
-
-            frameTitle.textContent = item.getAttribute("data-title");
-            frameDescription.textContent = item.getAttribute("data-description");
-            frameImage.src = item.getAttribute("data-image"); // Ensure this is the correct attribute for image URL
-            frameImage.alt = item.getAttribute("data-title"); // Update alt text for accessibility
-            frameImage.classList.remove('hidden'); // Make sure the image is not hidden when updated
-            learnMoreLink.href = item.getAttribute("data-slug");
-            learnMoreLink.textContent = "Learn More"; // Ensure the button text is correct
-        }
-
-        function highlightInitialOffering() {
-            const firstOffering = document.querySelector('.offerings-grid-item');
-            if (firstOffering) {
-                firstOffering.click(); // Trigger click to set initial content
+            function init() {
+                loadOfferings().then(() => {
+                    attachClickHandlersToOfferings();
+                    setTimeout(() => {
+                        highlightInitialOffering(); // Initial delay before starting automatic highlighting
+                        startAutomaticHighlighting();
+                    }, 5000); // 5 seconds delay before first automatic highlight
+                });
             }
-        }
 
-        function startAutomaticHighlighting() {
-            let index = 0;
-            const offerings = document.querySelectorAll('.offerings-grid-item');
-            highlightInterval = setInterval(() => {
-                offerings[index % offerings.length].click();
-                index++;
-            }, 5000); // Highlight next item every 5 seconds
-        }
-    });
+            async function loadOfferings() {
+                const response = await fetch('/api/offerings');
+                const offerings = await response.json();
+                // console.log('offerings: ', offerings)
+                const offeringsContainer = document.getElementById("offering-container");
+                offeringsContainer.innerHTML = ''; // Clear existing entries
+                offerings.forEach(offering => {
+                    const div = document.createElement("div");
+                    div.className = 'offerings-grid-item bg-white rounded-lg shadow-lg overflow-hidden';
+                    div.setAttribute('data-title', offering.title);
+                    div.setAttribute('data-description', offering.description);
+                    div.setAttribute('data-image', offering.image_url);
+                    div.setAttribute('data-slug', offering.button_link); // Assuming each offering has a direct link
+                    div.textContent = offering.title;
+                    offeringsContainer.appendChild(div);
+                });
+            }
 
-        
+            function attachClickHandlersToOfferings() {
+                const offeringsContainer = document.getElementById("offering-container");
+                offeringsContainer.addEventListener("click", function(event) {
+                    const target = event.target.closest('.offerings-grid-item');
+                    if (target) {
+                        highlightItem(target);
+                        updateDynamicContent(target);
+                    }
+                });
+            }
+
+            function highlightItem(item) {
+                document.querySelectorAll('.offerings-grid-item').forEach(offer => {
+                    offer.classList.remove('highlighted');
+                });
+                item.classList.add('highlighted');
+            }
+
+            function updateDynamicContent(item) {
+                const frameTitle = document.getElementById("frame-title");
+                const frameDescription = document.getElementById("frame-description");
+                const frameImage = document.getElementById("frame-image");
+                const learnMoreLink = document.querySelector("#dynamic-content .button-learn-more");
+
+                frameTitle.textContent = item.getAttribute("data-title");
+                frameDescription.textContent = item.getAttribute("data-description");
+                frameImage.src = item.getAttribute("data-image"); // Ensure this is the correct attribute for image URL
+                frameImage.alt = item.getAttribute("data-title"); // Update alt text for accessibility
+                frameImage.classList.remove('hidden'); // Make sure the image is not hidden when updated
+                learnMoreLink.href = item.getAttribute("data-slug");
+                learnMoreLink.textContent = "Learn More"; // Ensure the button text is correct
+            }
+
+            function highlightInitialOffering() {
+                const firstOffering = document.querySelector('.offerings-grid-item');
+                if (firstOffering) {
+                    firstOffering.click(); // Trigger click to set initial content
+                }
+            }
+
+            function startAutomaticHighlighting() {
+                let index = 0;
+                const offerings = document.querySelectorAll('.offerings-grid-item');
+                highlightInterval = setInterval(() => {
+                    offerings[index % offerings.length].click();
+                    index++;
+                }, 5000); // Highlight next item every 5 seconds
+            }
+        });
+
+
 
         // Load blogs dynamically
         async function loadBlogs() {
@@ -944,9 +561,9 @@
             });
         }
 
-        
 
-        
+
+
         document.addEventListener("DOMContentLoaded", function() {
             loadBlogs();
             loadmagazine();
@@ -973,15 +590,15 @@
             fetchSectionOneData();
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const csrImages = [
-                '{{ asset("images/csr/csr1.jpg") }}', 
-                '{{ asset("images/csr/csr2.jpg") }}', 
+                '{{ asset("images/csr/csr1.jpg") }}',
+                '{{ asset("images/csr/csr2.jpg") }}',
                 '{{ asset("images/csr/csr1.jpg") }}'
             ];
             const teamImages = [
-                '{{ asset("images/csr/csr1.jpg") }}', 
-                '{{ asset("images/csr/csr2.jpg") }}', 
+                '{{ asset("images/csr/csr1.jpg") }}',
+                '{{ asset("images/csr/csr2.jpg") }}',
                 '{{ asset("images/csr/csr1.jpg") }}'
             ];
 
@@ -1013,11 +630,11 @@
                 }, 5000);
             }
         });
-
     </script>
 
 
 </head>
+
 <body class="transition-all duration-500">
 
     <!-- Include Header -->
@@ -1026,7 +643,7 @@
     <!-- Include Floater -->
     @include('includes.floater')
 
-    
+
 
     <!-- Scroll Container -->
     <div class="scroll-container">
@@ -1041,8 +658,8 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
                     <!-- Left Column -->
                     <div class="max-w-lg">
-                    <h2 class="text-5xl font-bold mb-6 gradient-text" id="section-title">{{ $sectionData->title }}</h2>
-                    <p id="section-description">{{ $sectionData->description }}</p>
+                        <h2 class="text-5xl font-bold mb-6 gradient-text" id="section-title">{{ $sectionData->title }}</h2>
+                        <p id="section-description">{{ $sectionData->description }}</p>
                         <div class="flex flex-col md:flex-row gap-4 mb-10">
                             <a href="https://mnivesh.investwell.app/app/#/login" target="_blank" class="button button-get-started">Get Started</a>
                             <!-- <button class="button button-get-started">Get Started</button> -->
@@ -1162,11 +779,11 @@
 
         <section id="section-blogs" class="section bg-gray-100">
             <div class="container mx-auto text-center">
-                
+
                 <!-- Blogs Section -->
                 <h3 class="text-4xl font-bold gradient-text mb-6">Latest Insights & Blogs</h3>
                 <p class="text-lg text-gray-600 mb-8">Explore insights on financial strategies, market trends, and investment tips.</p>
-                
+
                 <div id='blog-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                     <!--blog cards will be rendered here -->
                     <!-- View All Blogs Card -->
@@ -1180,7 +797,7 @@
                 <!-- Magazines Section -->
                 <h3 class="text-4xl font-bold gradient-text mb-6">Latest Magazines</h3>
                 <p class="text-lg text-gray-600 mb-8">Browse our collection of insightful magazines covering various financial topics.</p>
-                
+
                 <!-- <div id='magazine-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center  border"> -->
                 <div id='magazine-container' class="flex flex-wrap min-w-80 gap-8 justify-center">
                     <!-- Magazine Card 1 -->
@@ -1192,16 +809,16 @@
                 </div>
             </div>
         </section>
-        <footer id="section-footer" class="section bg-gray-900 text-white">
+        <footer class="section bg-gray-900 text-white">
             <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-                
+
                 <!-- About Us Section -->
                 <div class="footer-about">
                     <h4 class="text-xl font-bold mb-4">About mNivesh</h4>
                     <p class="text-gray-400 text-sm">mNivesh is dedicated to helping individuals build a secure financial future. Explore investment plans, mutual funds, and tools tailored to your needs.</p>
                     <a href="/about" class="text-yellow-500 hover:underline mt-4 block">Learn More</a>
                 </div>
-                
+
                 <!-- Quick Links Section -->
                 <div class="footer-links">
                     <h4 class="text-xl font-bold mb-4">Quick Links</h4>
@@ -1252,4 +869,5 @@
     </div>
     <script src="{{ asset('js/header.js') }}"></script>
 </body>
+
 </html>

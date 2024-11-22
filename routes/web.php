@@ -8,12 +8,16 @@ use App\Http\Controllers\ServicesController;
 use App\Models\Service;
 
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\OtpController;
 use Illuminate\Support\Facades\DB;
 
 // routes for login with google 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
+// routes for login via phone number 
+Route::post('api/auth/phone', [OtpController::class, 'sendOtp']);
+Route::post('api/auth/validate-otp', [OtpController::class, 'validateOtp']);
 
 Route::get('/test-mongodb', function () {
     try {
@@ -47,7 +51,6 @@ Route::get('/api/section-one-new', [ContentController::class, 'getSectionOneData
 Route::get('/api/offerings', [ContentController::class, 'getOfferings']);
 Route::get('/api/blogs', [ContentController::class, 'getBlogs']);
 Route::get('/api/magazines', [ContentController::class, 'getMagazines']);
-
 
 Route::post('/upload-image', [ImageController::class, 'upload']);
 
