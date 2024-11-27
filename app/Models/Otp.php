@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model; // Use MongoDB Eloquent model
 
 class Otp extends Model
 {
-    use HasFactory;
-
     protected $connection = 'mongodb'; // Use MongoDB connection
     protected $collection = 'otps';   // MongoDB collection name
 

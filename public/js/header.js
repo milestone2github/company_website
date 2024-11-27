@@ -82,53 +82,70 @@ function closeSignInModal() {
 }
 
 // Show OTP Fields
-// function sendOTP() {
-//     document.getElementById('signInFields').classList.add('hidden');
-//     document.getElementById('otpFields').classList.remove('hidden');
-// }
-function sendOTP() {
-    // Get the input value
-    const mobileOrEmail = document.querySelector('#signInFields input').value;
+async function sendOTP(e) {
+    try {
+        // Get the input value
+        const mobileOrEmail = document.querySelector('#signInFields input').value;
 
-    // Validate input
-    if (!mobileOrEmail) {
-        alert('Please enter your mobile number or email.');
-        return;
+        // Validate input
+        if (mobileOrEmail.length < 10) {
+            alert('Please enter a valid mobile number.');
+            return;
+        }
+
+        // Disable button and show "Sending..."
+        const button = e.target;
+        button.innerHTML = 'Sending...';
+        button.disabled = true;
+
+        // Call the helper function
+        const result = await sendOTPRequest(mobileOrEmail);
+
+        // Handle the response
+        if (result.phone) {
+            console.log('OTP sent successfully:', result);
+
+            // Hide the sign-in fields and show the OTP fields
+            document.getElementById('signInFields').classList.add('hidden');
+            document.getElementById('otpFields').classList.remove('hidden');
+        } else {
+            alert('Unexpected response from the server.');
+        }
+    } catch (error) {
+        console.error('Error in sendOTP:', error);
+        alert('Failed to send OTP. Please try again.');
+    } finally {
+        // Reset the button state
+        const button = e.target;
+        button.innerHTML = 'Send OTP';
+        button.disabled = false;
     }
+}
 
-    // Prepare data
-    const data = {
-        phone: mobileOrEmail, // Assuming it's a phone number for OTP
-    };
+// send OTP request function 
+async function sendOTPRequest(phone) {
+    // Prepare data for the API request
+    const data = { phone };
 
     // Send AJAX request to your Laravel route
-    fetch('/api/auth/phone', {
+    const response = await fetch('/api/auth/phone', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
         },
         body: JSON.stringify(data),
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to send OTP');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('OTP sent successfully:', data);
-            phone = data.phone;
+    });
 
-            // Hide the sign-in fields and show the OTP fields
-            document.getElementById('signInFields').classList.add('hidden');
-            document.getElementById('otpFields').classList.remove('hidden');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to send OTP. Please try again.');
-        });
+    // Check if the response is OK
+    if (!response.ok) {
+        throw new Error('Failed to send OTP');
+    }
+
+    // Parse and return the JSON response
+    return await response.json();
 }
+
 
 // Handle Back Button to Go Back to Sign-In Fields
 function goBackToSignIn() {
@@ -160,68 +177,249 @@ function signInWithPassword() {
     document.getElementById('signInFields').classList.add('hidden');
     document.getElementById('otpFields').classList.remove('hidden');
 }
-// Handle OTP Verification
-function verifyOTP() {
-    // Collect the OTP entered by the user
-    const otpInputs = document.querySelectorAll('.otp-input');
-    const otp = Array.from(otpInputs).map(input => input.value).join(''); // Combine all OTP input fields
 
-    // Validate that all fields are filled
-    if (otp.length !== 4) {
-        alert('Please enter the complete OTP.');
-        return;
-    }
+// api request to login investwell 
+async function loginInvestwell(mobile) {
+    const endpoint = "/api/auth/login-investwell";
 
-    // Get the phone number entered by the user
-    const phoneNumber = document.querySelector('#signInFields input').value;
+    let alertItem = document.getElementById('signin-modal-alert');
+    alertItem.classList.remove('text-red-500');
+    alertItem.classList.add('text-green-500');
+    alertItem.innerHTML = 'Verifying user...';
+    alertItem.classList.remove('hidden');
 
-    // Validate the phone number
-    if (!phoneNumber || phoneNumber.length < 10 || phoneNumber.length > 12) {
-        alert('Please enter a valid phone number.');
-        return;
-    }
+    try {
+        const payload = { mobile: mobile };
 
-    // Prepare the data for the API request
-    const data = {
-        phone: phoneNumber,
-        otp: otp,
-    };
+        // Open a blank tab immediately
+        const newTab = window.open("", "_blank");
 
-    // Show a loading state (optional)
-    document.getElementById('verify-otp').innerHTML = 'Verifying...';
-
-    // Make the API request to verify the OTP
-    fetch('/api/auth/validate-otp', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: JSON.stringify(data),
-    })
-        .then(response => response.json())
-        .then(result => {
-            // Handle successful response
-            if (result.message) {
-                alert(result.message); // Show success message
-                window.location.href = '/mutual-funds/equity'; // Redirect to the dashboard or desired page
-            } else {
-                alert(result.error); // Show error message
-            }
-        })
-        .catch(error => {
-            // Handle any errors
-            console.error('Error:', error);
-            alert('Failed to verify OTP. Please try again.');
-        })
-        .finally(() => {
-            // Reset the UI
-            document.getElementById('otpFields').classList.remove('hidden');
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+            body: JSON.stringify(payload),
         });
+
+        const data = await response.json();
+
+        if (response.ok && data.url) {
+            const redirectUrl = data.url;
+
+            // Redirect the new tab to the desired URL
+            newTab.location.href = redirectUrl;
+            alertItem.classList.add('hidden');
+        } else {
+            // Close the tab if the response fails
+            newTab.close();
+            alertItem.classList.remove('text-green-500');
+            alertItem.classList.add('text-red-500');
+            alertItem.innerHTML = data.error;
+        }
+    } catch (error) {
+        console.error("Error in loginInvestwell:", error);
+        alertItem.classList.remove('text-green-500');
+        alertItem.classList.add('text-red-500');
+        alertItem.innerHTML = "An error occurred. Please try again.";
+    }
+}
+
+// Handle OTP Verification
+async function verifyOTP() {
+    try {
+        // Collect the OTP entered by the user
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const otp = Array.from(otpInputs).map(input => input.value).join(''); // Combine all OTP input fields
+        let alertItem = document.getElementById('signin-modal-alert')
+        if (!alertItem.classList.contains('hidden')) {
+            alertItem.classList.add('hidden');
+        }
+
+        // Validate that all fields are filled
+        if (otp.length !== 4) {
+            alert('Please enter the complete OTP.');
+            return;
+        }
+
+        // Get the phone number entered by the user
+        const phoneNumber = document.querySelector('#signInFields input').value;
+
+        // Validate the phone number
+        if (!phoneNumber || phoneNumber.length < 10 || phoneNumber.length > 12) {
+            alert('Please enter a valid phone number.');
+            return;
+        }
+
+        // Prepare the data for the API request
+        const data = {
+            phone: phoneNumber,
+            otp: otp,
+        };
+
+        // Show a loading state (optional)
+        const verifyOtpButton = document.getElementById('verify-otp');
+        verifyOtpButton.innerHTML = 'Verifying...';
+        verifyOtpButton.disabled = true;
+
+        // Make the API request to verify the OTP
+        const response = await fetch('/api/auth/validate-otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        // Handle response
+        if (response.ok) {
+            if (result.mobile) {
+                alertItem.classList.remove('text-red-500');
+                alertItem.classList.add('text-green-500');
+                alertItem.innerHTML = 'OTP Verified';
+                alertItem.classList.remove('hidden');
+                await loginInvestwell(result.mobile); // Call loginInvestwell function
+            } else {
+                alertItem.classList.remove('text-green-500');
+                alertItem.classList.add('text-red-500');
+                alertItem.innerHTML = result.error;
+                alertItem.classList.remove('hidden');
+            }
+        } else {
+            alertItem.classList.remove('text-green-500');
+            alertItem.classList.add('text-red-500');
+            alertItem.innerHTML = result.error;
+            alertItem.classList.remove('hidden');
+        }
+    } catch (error) {
+        // Handle any errors
+        console.error('Error:', error);
+        alert('An error occurred while verifying OTP. Please try again.');
+    } finally {
+        // Reset the UI
+        const verifyOtpButton = document.getElementById('verify-otp');
+        verifyOtpButton.innerHTML = 'Verify';
+        verifyOtpButton.disabled = false;
+        otpInputs.forEach(input => {
+            input.value = '';
+        });
+    }
 }
 
 // Handle Resending
-function resendOTP() {
-    document.getElementById('otpFields').classList.add('hidden');
-    document.getElementById('signInFields').classList.remove('hidden');
+async function resendOTP() {
+    try {
+        // Get the phone number from the OTP fields
+        const phoneNumber = document.querySelector('#signInFields input').value;
+
+        // Validate phone number
+        if (!phoneNumber) {
+            alert('Phone number is missing.');
+            return;
+        }
+
+        // Disable the Resend OTP button
+        const button = document.getElementById('resend-otp');
+        button.innerHTML = 'Resending...';
+        button.disabled = true;
+
+        let alertItem = document.getElementById('signin-modal-alert')
+        if (!alertItem.classList.contains('hidden')) {
+            alertItem.classList.add('hidden');
+        }
+
+        // Call the helper function
+        const result = await sendOTPRequest(phoneNumber);
+
+        // Handle the response
+        if (result.phone) {
+            console.log('OTP resent successfully:', result);
+            alert('OTP resent successfully.');
+            alertItem.classList.remove('text-red-500');
+            alertItem.classList.add('text-green-500');
+            alertItem.innerHTML = 'OTP sent successfully.';
+            alertItem.classList.remove('hidden');
+        } else {
+            alertItem.classList.remove('text-green-500');
+            alertItem.classList.add('text-red-500');
+            alertItem.innerHTML = 'Failed to resend OTP. Please try again.';
+            alertItem.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Error in resendOTP:', error);
+        let alertItem = document.getElementById('signin-modal-alert')
+        alertItem.classList.remove('text-green-500');
+        alertItem.classList.add('text-red-500');
+        alertItem.innerHTML = 'Failed to resend OTP. Please try again.';
+        alertItem.classList.remove('hidden');
+    } finally {
+        // Reset the button state
+        const button = document.getElementById('resend-otp');
+        button.innerHTML = 'Resend OTP';
+        button.disabled = false;
+    }
 }
+
+//otp inputs handling
+function handleOtpInput(event) {
+    const input = event.target;
+    const value = input.value;
+
+    // Validate the input: allow only numeric values
+    if (!/^\d$/.test(value)) {
+        input.value = ""; // Clear invalid input
+        return;
+    }
+
+    const otpInputs = document.querySelectorAll(".otp-input");
+    const currentIndex = Array.from(otpInputs).indexOf(input);
+
+    // Move to the next input if it exists
+    const nextInput = otpInputs[currentIndex + 1];
+    if (nextInput) {
+        nextInput.focus();
+    }
+}
+
+function handleOtpKeyDown(event) {
+    const input = event.target;
+    const otpInputs = document.querySelectorAll(".otp-input");
+    const currentIndex = Array.from(otpInputs).indexOf(input);
+
+    if (event.key === "Backspace") {
+        // Move to the previous input on backspace if empty
+        if (input.value === "" && currentIndex > 0) {
+            const previousInput = otpInputs[currentIndex - 1];
+            previousInput.focus();
+        }
+    }
+}
+
+function handleOtpPaste(event) {
+    event.preventDefault(); // Prevent default paste behavior
+
+    const pasteData = event.clipboardData.getData("text").replace(/\D/g, ""); // Only numeric
+    const otpInputs = document.querySelectorAll(".otp-input");
+
+    if (pasteData.length === otpInputs.length) {
+        otpInputs.forEach((input, idx) => {
+            input.value = pasteData[idx] || ""; // Assign pasted values
+        });
+
+        // Move focus to the last input
+        otpInputs[otpInputs.length - 1].focus();
+    }
+}
+
+// Assign event listeners to all OTP inputs
+const otpInputs = document.querySelectorAll(".otp-input");
+
+otpInputs.forEach((input) => {
+    input.addEventListener("input", handleOtpInput);
+    input.addEventListener("keydown", handleOtpKeyDown);
+    input.addEventListener("paste", handleOtpPaste);
+});

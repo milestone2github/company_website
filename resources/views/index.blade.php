@@ -14,7 +14,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
-    <!-- Custom Styles -->
+
     <style>
         /* Basic Resets */
         * {
@@ -36,33 +36,50 @@
             flex-direction: column;
         }
 
-        /* Scroll Container */
+        /* This will make the container scroll vertically and snap the sections */
         .scroll-container {
             scroll-snap-type: y mandatory;
+            /* Vertical snapping, mandatory */
             overflow-y: scroll;
+            /* Enable vertical scrolling */
             height: 100vh;
-            /* Full viewport height */
+            /* Full height of the viewport */
+            scroll-behavior: smooth;
+            /* Smooth scrolling */
         }
 
-        /* Section Styling */
+        /* Ensure that each section takes the full height of the viewport */
         .section {
-            scroll-snap-align: center;
+            scroll-snap-align: start;
             min-height: 100vh;
-            /* Full viewport height */
             display: flex;
             flex-direction: column;
             justify-content: center;
+            /* Center vertically */
             align-items: center;
+            /* Center horizontally */
             padding: 4rem 1rem;
             background-color: #101211;
-            /* Default dark background */
-            /* color: #fff; */
+            color: white;
         }
 
         footer.section {
             min-height: fit-content;
-            padding: 1rem 1rem;
+            padding: 3rem 1rem 3rem 1rem;
         }
+
+        /* Optional: For better user experience, you can add hover or focus states */
+        .section:hover {
+            background-color: #2c2f36;
+            /* Lighten background on hover */
+        }
+
+        /* For Accessibility: Ensure focusable elements are styled */
+        .section:focus {
+            outline: 2px solid #f5a623;
+            outline-offset: 5px;
+        }
+
 
         /* Section-Specific Backgrounds */
         #section-main-content,
@@ -126,6 +143,11 @@
         .button-about-us {
             background-color: #3b82f6;
             color: white;
+        }
+
+        #third-section-heading {
+            padding-top: 1rem;
+            margin-bottom: 1rem;
         }
 
 
@@ -226,12 +248,13 @@
             gap: 0.75rem;
             width: 100%;
             max-width: 1000px;
+            margin: auto;
         }
 
         .large-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
+            gap: 0.5rem;
             width: 85%;
             max-width: 650px;
             margin: 1rem auto 0;
@@ -339,11 +362,6 @@
         }
 
         /* Footer */
-        #section-footer {
-            padding: 4rem 1rem 0rem 1rem;
-            margin: 0;
-        }
-
         #section-footer .text-gray-400 {
             color: #b8b8b8;
         }
@@ -504,8 +522,6 @@
             }
         });
 
-
-
         // Load blogs dynamically
         async function loadBlogs() {
             const response = await fetch('/api/blogs'); // Replace with actual API endpoint
@@ -519,11 +535,10 @@
                 blogCard.classList.add("blog-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden");
 
                 blogCard.innerHTML = `
-                    <img src="${blog.image}" alt="Blog Image" class="w-full h-48 object-cover">
+                    <img src="${blog.image_url}" alt="Blog Image" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h4 class="text-xl font-bold mb-2">${blog.title}</h4>
-                        <p class="text-gray-700 text-sm mb-4">${blog.description.slice(0, 140) + ' ...'}</p>
-                        <p class="text-gray-500 text-xs">By ${blog.author} • ${blog.date}</p>
+                        <p class="text-gray-500 text-xs">By ${blog.author} • ${blog.post_date}</p>
                         <a href="/${blog.slug}" class="block mt-4 text-yellow-500 font-semibold hover:underline">Read More</a>
                     </div>
                 `;
@@ -546,7 +561,7 @@
 
             magazines.forEach(magazine => {
                 const magazinecard = document.createElement("div");
-                magazinecard.classList.add("magazine-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden", "px-8");
+                magazinecard.classList.add("magazine-card", "bg-white", "rounded-lg", "shadow-lg", "overflow-hidden");
 
                 magazinecard.innerHTML = `
                     <img src="${magazine.image_url}" alt="Magazine Image" class="w-full h-32 object-cover">
@@ -573,7 +588,7 @@
                     const response = await fetch('/api/section-one-new');
                     const data = await response.json();
 
-                    //console.log(data);  // Log the response to the console
+                    // console.log(data);  // Log the response to the console
 
                     if (data) {
                         document.getElementById("section-title").textContent = data.title || 'Default Title';
@@ -644,7 +659,6 @@
     @include('includes.floater')
 
 
-
     <!-- Scroll Container -->
     <div class="scroll-container">
         <!-- Section 1: Main Content Section -->
@@ -661,9 +675,9 @@
                         <h2 class="text-5xl font-bold mb-6 gradient-text" id="section-title">{{ $sectionData->title }}</h2>
                         <p id="section-description">{{ $sectionData->description }}</p>
                         <div class="flex flex-col md:flex-row gap-4 mb-10">
-                            <a href="https://mnivesh.investwell.app/app/#/login" target="_blank" class="button button-get-started">Get Started</a>
                             <!-- <button class="button button-get-started">Get Started</button> -->
-                            <a href='/about' class="button button-about-us">About Us</a>
+                            <a href="https://mnivesh.investwell.app/app/#/public/signup/1" class="button button-get-started">Get Started</a>
+                            <button class="button button-about-us">About Us</button>
                         </div>
                         <div class="grid grid-cols-3 gap-4">
                             <div class="text-center">
@@ -691,10 +705,11 @@
 
 
         <!-- Section 2: Our Offerings -->
-        <!-- <section id="section-our-offerings" class="section">
+        <section id="section-our-offerings" class="section">
             <div class="container mx-auto">
                 <h3 class="text-4xl font-bold gradient-text mb-8">Our Offerings</h3>
                 <div class="content-grid">
+
                     <div class="grid grid-cols-2 gap-4" id="offering-container">
                         <div class="offerings-grid-item" data-title="Investment Plans" data-description="Choose from a variety of investment plans designed to suit your financial goals." data-image="{{ asset('images/investment_plan.png') }}" data-image="/1234">
                             Investment Plans
@@ -721,7 +736,6 @@
                     <div id="dynamic-content" class="p-6 border rounded-lg shadow-lg w-full">
                         <h3 class="text-3xl font-bold mb-4" id="frame-title">Select an Offering</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                            
                             <div class="flex flex-col">
                                 <p class="text-lg mb-4" id="frame-description">Please select an offering from the left to see more details here.</p>
                                 <a href="#" class="button button-learn-more mt-6">Learn More</a>
@@ -732,15 +746,15 @@
                     </div>
                 </div>
             </div>
-        </section> -->
+        </section>
 
         <!-- Section 3: Stats Section -->
         <section id="section-stats" class="section">
             <div class="container mx-auto">
-                <h3 class="text-4xl font-bold gradient-text mb-10 text-center">Our Achievements</h3>
+                <h3 class="text-4xl font-bold gradient-text mb-8">Our Achievements</h3>
 
                 <!-- Stats Grid - First Row with 4 Columns -->
-                <div class="stats-grid mx-auto mb-8 md:mb-20">
+                <div class="stats-grid">
                     <div class="stats-item-small" id="aum-item">
                         <div class="label">AUM (in Cr)</div>
                         <div class="number" id="aum-number">550</div>
@@ -761,7 +775,7 @@
                 </div>
 
                 <!-- Stats Grid - Second Row with 2 Columns -->
-                <h3 class="text-4xl text-center font-bold gradient-text mb-10" id="third-section-heading">Our CSR and Team Activities</h3>
+                <h3 class="text-4xl font-bold gradient-text mb-8" id="third-section-heading">Our CSR and Team Activities</h3>
                 <div class="large-stats-grid">
                     <div class="stats-item slideshow-item" id="csr-slideshow">
                         <div class="slideshow-container" id="csr-slideshow-container">
@@ -798,74 +812,17 @@
                 <h3 class="text-4xl font-bold gradient-text mb-6">Latest Magazines</h3>
                 <p class="text-lg text-gray-600 mb-8">Browse our collection of insightful magazines covering various financial topics.</p>
 
-                <!-- <div id='magazine-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center  border"> -->
-                <div id='magazine-container' class="flex flex-wrap min-w-80 gap-8 justify-center">
+                <div id='magazine-container' class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <!-- Magazine Card 1 -->
 
                     <!-- View All Magazines Card -->
-                    <div class="magazine-card px-8 bg-white rounded-lg shadow-lg overflow-hidden flex items-center justify-center">
+                    <div class="magazine-card bg-white rounded-lg shadow-lg overflow-hidden flex items-center justify-center">
                         <a href="/all-magazines" class="block text-center text-yellow-500 font-bold text-lg hover:underline">View All Magazines</a>
                     </div>
                 </div>
             </div>
         </section>
-        <footer class="section bg-gray-900 text-white">
-            <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-
-                <!-- About Us Section -->
-                <div class="footer-about">
-                    <h4 class="text-xl font-bold mb-4">About mNivesh</h4>
-                    <p class="text-gray-400 text-sm">mNivesh is dedicated to helping individuals build a secure financial future. Explore investment plans, mutual funds, and tools tailored to your needs.</p>
-                    <a href="/about" class="text-yellow-500 hover:underline mt-4 block">Learn More</a>
-                </div>
-
-                <!-- Quick Links Section -->
-                <div class="footer-links">
-                    <h4 class="text-xl font-bold mb-4">Quick Links</h4>
-                    <ul class="text-gray-400 space-y-2">
-                        <li><a href="/investment-plans" class="hover:text-yellow-500">Investment Plans</a></li>
-                        <li><a href="/mutual-funds" class="hover:text-yellow-500">Mutual Funds</a></li>
-                        <li><a href="/retirement-planning" class="hover:text-yellow-500">Retirement Planning</a></li>
-                        <li><a href="/tax-saving" class="hover:text-yellow-500">Tax Saving</a></li>
-                        <li><a href="/wealth-management" class="hover:text-yellow-500">Wealth Management</a></li>
-                    </ul>
-                </div>
-
-                <!-- Important Links Section -->
-                <div class="footer-important-links">
-                    <h4 class="text-xl font-bold mb-4">Important Links</h4>
-                    <ul class="text-gray-400 space-y-2">
-                        <li><a href="/disclaimer" class="hover:text-yellow-500">Disclosure & Disclaimer</a></li>
-                        <li><a href="/forms" class="hover:text-yellow-500">Forms</a></li>
-                        <li><a href="/resources" class="hover:text-yellow-500">Resources</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact & Social Media Section -->
-                <div class="footer-contact">
-                    <h4 class="text-xl font-bold mb-4">Get in Touch</h4>
-                    <p class="text-gray-400 text-sm">Have questions? Reach out to us via email or connect with us on social media.</p>
-                    <p class="mt-2 text-gray-400"><strong>Email:</strong> support@mnivesh.com</p>
-                    <div class="flex mt-4 space-x-4">
-                        <a href="https://facebook.com/mnivesh" target="_blank" class="text-gray-400 hover:text-yellow-500"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com/mnivesh" target="_blank" class="text-gray-400 hover:text-yellow-500"><i class="fab fa-twitter"></i></a>
-                        <a href="https://linkedin.com/company/mnivesh" target="_blank" class="text-gray-400 hover:text-yellow-500"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://instagram.com/mnivesh" target="_blank" class="text-gray-400 hover:text-yellow-500"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer Bottom Section -->
-            <div class="mt-12 text-center text-gray-500 text-sm border-t border-gray-700 pt-4">
-                <p>&copy; 2024 mNivesh. All rights reserved. | <a href="/terms" class="hover:underline text-yellow-500">Terms of Service</a> | <a href="/privacy" class="hover:underline text-yellow-500">Privacy Policy</a></p>
-            </div>
-        </footer>
-
-
-
-
-
-
+        @include('includes.footer')
     </div>
     <script src="{{ asset('js/header.js') }}"></script>
 </body>

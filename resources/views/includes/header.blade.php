@@ -25,14 +25,15 @@
                     <a href="#" class="menu-link transition-all duration-300">Mutual Funds</a>
                     <!-- Submenu -->
                     <div class="submenu-modal rounded-lg">
-                        <div id='mf-items' class="flex flex-wrap justify-start gap-4 p-2 px-3 max-w-80">
+                        <div class="flex flex-wrap justify-start gap-4 p-4">
                             <!-- Submenu Items -->
-                            <a href="/mutual-funds/equity" class="submenu-item text-black grow flex-shrink-0">Equity MF</a>
-                            <a href="/mutual-funds/debt" class="submenu-item text-black grow flex-shrink-0">Debt MF</a>
-                            <a href="/mutual-funds/hybrid" class="submenu-item text-black grow flex-shrink-0">Hybrid MF</a>
-                            <!-- <a href="#" class="submenu-item text-black grow flex-shrink-0">Latest NFO</a>
-                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Check KYC</a>
-                                <a href="#" class="submenu-item text-black grow flex-shrink-0">Top Schemes</a> -->
+                            <a href="/Equity-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Equity MF</a>
+                            <a href="/Debt-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Debt MF</a>
+                            <a href="/Hybrid-Mutual-Funds" class="submenu-item text-black flex-shrink-0">Hybrid MF</a>
+                            <!-- </div><div class="flex flex-wrap justify-start gap-4 p-4">
+                                <a href="#" class="submenu-item text-black flex-shrink-0">Latest NFO</a>
+                                <a href="#" class="submenu-item text-black flex-shrink-0">Check KYC</a>
+                                <a href="#" class="submenu-item text-black flex-shrink-0">Top Schemes</a> -->
                         </div>
                     </div>
                 </div>
@@ -61,9 +62,9 @@
                     <div class="submenu-modal rounded-lg">
                         <div class="flex flex-wrap justify-start gap-4 p-4">
                             <!-- Submenu Items -->
-                            <a href="/insurance/life" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
-                            <a href="/insurance/health" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
-                            <!-- <a href="/insurance/term" class="submenu-item text-black flex-shrink-0">Term Insurance</a> -->
+                            <a href="life-insurance" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
+                            <a href="health-insurance" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
+                            <a href="corporate-insurance" class="submenu-item text-black flex-shrink-0">Corporate Insurance</a>
                         </div>
                     </div>
                 </div>
@@ -92,15 +93,6 @@
                 class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
                 Sign In
             </button>
-            <!-- <button
-                class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
-                Get Started
-            </button> -->
-            <!-- <a href="https://mnivesh.investwell.app/app/#/login"
-                target="_blank"
-                class="bg-[rgba(255,255,255,0.08)] text-white rounded-lg border border-white hover-increase-font transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
-                Sign In
-            </a> -->
             <a href="https://mnivesh.investwell.app/app/#/public/signup/1"
                 target="_blank"
                 class="get-started-button rounded-lg shadow-md transition-all duration-300 px-2 py-1 md:px-4 md:py-2 text-sm md:text-base">
@@ -163,9 +155,9 @@
             <div id="mobile-submenu-insurance" class="submenu-hidden bg-yellow-500 bg-opacity-50">
                 <div class="flex flex-col p-2">
                     <!-- Submenu Items -->
-                    <a href="/insurance/life" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
-                    <a href="/insurance/health" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
-                    <a href="/insurance/term" class="submenu-item text-black flex-shrink-0">Term Insurance</a>
+                    <a href="/life-insurance" class="submenu-item text-black flex-shrink-0">Life Insurance</a>
+                    <a href="/health-insurance" class="submenu-item text-black flex-shrink-0">Health Insurance</a>
+                    <a href="/corporate-insurance" class="submenu-item text-black flex-shrink-0">Corporate Insurance</a>
                 </div>
             </div>
         </div>
@@ -198,45 +190,46 @@
     <div class="modal-content">
         <span class="modal-close" onclick="closeSignInModal()">&times;</span>
         <div id="signInFields">
-            <div class="sign-in-header">
+            <div class="sign-in-header mb-1">
                 <img src="{{ asset('images/cross-icon.png') }}" alt="Sign In Icon" class="sign-in-icon">
                 <h2 class="text-2xl font-bold">Sign In</h2>
             </div>
-            <input type="text" placeholder="Mobile" class="w-full p-2 mb-4 border text-gray-900 border-gray-300 rounded-md">
-            <button onclick="sendOTP()" class="bg-yellow-500 text-black w-full py-2 rounded-md">Send OTP</button>
-            <div class="text-center mt-4">or</div>
+            <input type="text" inputmode="numeric" maxlength="12" placeholder="Mobile" class="w-full p-2 mb-4 border text-gray-900 border-gray-300 rounded-md">
+            <button onclick="sendOTP(event)" class="bg-yellow-500 text-black w-full py-2 rounded-md disabled:text-gray-400 disabled:cursor-auto">Send OTP</button>
+
+            <!-- <div class="text-center mt-4">or</div>
             <div class="text-center mt-4 font-bold" id="sign-in-with-text">Sign in with</div>
             <div class="sso-icons">
                 <a href="{{ route('auth.google') }}" class="">
                     <img src="{{ asset('images/google-logo.png') }}" alt="Google" class="sso-icon" id="google-logo">
                 </a>
-
                 <img src="{{ asset('images/zoho-logo.png') }}" onclick="zohoSso()" alt="Zoho" class="sso-icon" id="zoho-logo" style="width: 40px; height: 25px;">
                 <img src="{{ asset('images/yahoo-logo.png') }}" onclick="yahooSso()" alt="Yahoo" class="sso-icon" id="yahoo-logo">
                 <img src="{{ asset('images/apple-logo.png') }}" onclick="appleSso()" alt="Apple" class="sso-icon" id="apple-logo" style="width: 30px; height: 40px;">
-            </div>
+            </div> -->
             <div class="text-center mt-4">or</div>
             <div class="text-center mt-4">
-                <a href="#" class="text-white hover:underline">Sign in with password instead</a>
+                <a href="https://mnivesh.investwell.app/app/#/login" class="text-white hover:underline">Sign in with password instead</a>
             </div>
 
         </div>
+        
         <div id="otpFields" class="hidden">
             <span class="modal-close" onclick="closeSignInModal()">&times;</span>
             <!-- Back Button (Mirror Image of Close Button) -->
             <button class="otp-back-button" onclick="goBackToSignIn()">&#8592;</button>
-
+            <p id="signin-modal-alert" class="text-green-500 text-sm mt-4 mb-1 text-center hidden"></p>
             <!-- Enter OTP Header (Center-Aligned) -->
-            <h2 class="text-2xl otp-header mb-4">Enter OTP</h2>
+            <h2 class="text-2xl otp-header mt-1 mb-4">Enter OTP</h2>
 
             <div class="flex justify-center mb-4">
-                <input type="text" maxlength="1" class="otp-input" placeholder="*">
-                <input type="text" maxlength="1" class="otp-input" placeholder="*">
-                <input type="text" maxlength="1" class="otp-input" placeholder="*">
-                <input type="text" maxlength="1" class="otp-input" placeholder="*">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-input text-gray-800" placeholder="*">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-input text-gray-800" placeholder="*">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-input text-gray-800" placeholder="*">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-input text-gray-800" placeholder="*">
             </div>
-            <button id="verify-otp" class="bg-yellow-500 text-black w-full py-2 rounded-md mb-2" onclick="verifyOTP()">Verify OTP</button>
-            <button class="bg-gray-500 text-white w-full py-2 rounded-md" onclick="resendOTP()">Resend OTP</button>
+            <button id="verify-otp" class="bg-yellow-500 text-black w-full py-2 rounded-md mb-2 disabled:text-gray-400 disabled:cursor-auto" onclick="verifyOTP()">Verify OTP</button>
+            <button id="resend-otp" class="bg-gray-500 text-white w-full py-2 rounded-md disabled:text-gray-200 disabled:cursor-auto" onclick="resendOTP()">Resend OTP</button>
         </div>
     </div>
 </div>
