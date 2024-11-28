@@ -45,5 +45,6 @@ Route::get('/Hybrid-Mutual-Funds', [ServicesController::class, 'hybridMutualFund
 Route::get('/life-insurance', [ServicesController::class, 'lifeInsurance']);
 Route::get('/health-insurance', [ServicesController::class, 'healthInsurance']);
 Route::get('/corporate-insurance', [ServicesController::class, 'corporateInsurance']);
+Route::get('/country-codes', [ContentController::class, 'getCountryCodes']);
 // Important links services routes 
 Route::get('/disclaimer', [ServicesController::class, 'disclaimerAndDiscolosure']);

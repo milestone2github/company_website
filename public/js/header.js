@@ -1,5 +1,3 @@
-let phone = '';
-
 // Ensure dark mode is set by default
 if (!localStorage.getItem('theme')) {
     document.documentElement.classList.add('dark');
@@ -84,32 +82,58 @@ function closeSignInModal() {
 // Show OTP Fields
 async function sendOTP(e) {
     try {
+        // remove existing phone stored in localStorage 
+        if(localStorage.getItem('phone')) localStorage.removeItem('phone');
+        if(localStorage.getItem('otpDelChnl')) localStorage.removeItem('otpDelChnl');
+
         // Get the input value
-        const mobileOrEmail = document.querySelector('#signInFields input').value;
+        const input = document.getElementById('mobileOrEmail').value.trim();
 
         // Validate input
-        if (mobileOrEmail.length < 10) {
-            alert('Please enter a valid mobile number.');
+        const isPhone = /^\d{10,12}$/.test(input); // Matches 10-12 digit phone numbers
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input); // Matches valid email format
+
+        if (!isPhone && !isEmail) {
+            alert('Please enter a valid mobile number or email address.');
             return;
         }
+
+        // Add country code prefix for phone numbers
+        let fullPhoneNumber = null;
+        if (isPhone) {
+            const countryCode = document.getElementById('countryCodeInput').value || '+91'; // Default to India
+            if (!countryCode.startsWith('+')) {
+                alert('Please select a valid country code.');
+                return;
+            }
+            fullPhoneNumber = `${countryCode}${input}`;
+        }
+
+        const otpDeliveryChannel = document.querySelector('input[name="otpDeliveryChannel"]:checked').value;
 
         // Disable button and show "Sending..."
         const button = e.target;
         button.innerHTML = 'Sending...';
         button.disabled = true;
 
-        // Call the helper function
-        const result = await sendOTPRequest(mobileOrEmail);
+        // Prepare the data
+        const data = isPhone ? { phone: fullPhoneNumber } : { email: input };
+        data.otpDeliveryChannel = otpDeliveryChannel;
+
+        // Call the helper function to send OTP
+        const result = await sendOTPRequest(data);
 
         // Handle the response
-        if (result.phone) {
+        if (result.phoneOrEmail) {
             console.log('OTP sent successfully:', result);
+            localStorage.setItem('phone', result.phoneOrEmail);
+            localStorage.setItem('otpDelChnl', otpDeliveryChannel);
 
             // Hide the sign-in fields and show the OTP fields
             document.getElementById('signInFields').classList.add('hidden');
             document.getElementById('otpFields').classList.remove('hidden');
         } else {
-            alert('Unexpected response from the server.');
+            alert(result.error || 'Unexpected response from the server.');
         }
     } catch (error) {
         console.error('Error in sendOTP:', error);
@@ -123,10 +147,7 @@ async function sendOTP(e) {
 }
 
 // send OTP request function 
-async function sendOTPRequest(phone) {
-    // Prepare data for the API request
-    const data = { phone };
-
+async function sendOTPRequest(data) {
     // Send AJAX request to your Laravel route
     const response = await fetch('/api/auth/phone', {
         method: 'POST',
@@ -151,6 +172,8 @@ async function sendOTPRequest(phone) {
 function goBackToSignIn() {
     document.getElementById('otpFields').classList.add('hidden');
     document.getElementById('signInFields').classList.remove('hidden');
+    let alertItem = document.getElementById('signin-modal-alert');
+    alertItem.classList.add('hidden');
 }
 // Handle Google SSO
 function googleSso() {
@@ -211,6 +234,8 @@ async function loginInvestwell(mobile) {
             // Redirect the new tab to the desired URL
             newTab.location.href = redirectUrl;
             alertItem.classList.add('hidden');
+            localStorage.removeItem('phone');
+            localStorage.removeItem('otpDelChnl');
         } else {
             // Close the tab if the response fails
             newTab.close();
@@ -244,17 +269,11 @@ async function verifyOTP() {
         }
 
         // Get the phone number entered by the user
-        const phoneNumber = document.querySelector('#signInFields input').value;
-
-        // Validate the phone number
-        if (!phoneNumber || phoneNumber.length < 10 || phoneNumber.length > 12) {
-            alert('Please enter a valid phone number.');
-            return;
-        }
+        const phone = localStorage.getItem('phone');
 
         // Prepare the data for the API request
         const data = {
-            phone: phoneNumber,
+            phone: phone,
             otp: otp,
         };
 
@@ -282,7 +301,7 @@ async function verifyOTP() {
                 alertItem.classList.add('text-green-500');
                 alertItem.innerHTML = 'OTP Verified';
                 alertItem.classList.remove('hidden');
-                await loginInvestwell(result.mobile); // Call loginInvestwell function
+                await loginInvestwell(result.mobile);
             } else {
                 alertItem.classList.remove('text-green-500');
                 alertItem.classList.add('text-red-500');
@@ -314,11 +333,12 @@ async function verifyOTP() {
 async function resendOTP() {
     try {
         // Get the phone number from the OTP fields
-        const phoneNumber = document.querySelector('#signInFields input').value;
+        const phoneOrEmail = localStorage.getItem('phone');
+        const otpDeliveryChannel = localStorage.getItem('otpDelChnl');
 
         // Validate phone number
-        if (!phoneNumber) {
-            alert('Phone number is missing.');
+        if (!phoneOrEmail) {
+            alert('Phone number or Email is missing.');
             return;
         }
 
@@ -332,13 +352,18 @@ async function resendOTP() {
             alertItem.classList.add('hidden');
         }
 
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(phoneOrEmail);
+        const data = {
+            otpDeliveryChannel: otpDeliveryChannel
+        }
+        isEmail ? data.email = phoneOrEmail : data.phone = phoneOrEmail;
+
         // Call the helper function
-        const result = await sendOTPRequest(phoneNumber);
+        const result = await sendOTPRequest(data);
 
         // Handle the response
-        if (result.phone) {
+        if (result.phoneOrEmail) {
             console.log('OTP resent successfully:', result);
-            alert('OTP resent successfully.');
             alertItem.classList.remove('text-red-500');
             alertItem.classList.add('text-green-500');
             alertItem.innerHTML = 'OTP sent successfully.';
@@ -423,3 +448,32 @@ otpInputs.forEach((input) => {
     input.addEventListener("keydown", handleOtpKeyDown);
     input.addEventListener("paste", handleOtpPaste);
 });
+
+// Fetch country codes from the Laravel route
+async function loadCountryCodes() {
+    try {
+        const response = await fetch('/country-codes');
+        if (!response.ok) {
+            throw new Error('Failed to load country codes.');
+        }
+
+        const countryCodes = await response.json();
+        populateCountryCodeDatalist(countryCodes);
+    } catch (error) {
+        console.error('Error loading country codes:', error);
+    }
+}
+
+// Populate the datalist with country codes
+function populateCountryCodeDatalist(codes) {
+    const datalist = document.getElementById('countryCodes');
+    codes.forEach(code => {
+        const option = document.createElement('option');
+        option.value = code.dial_code;
+        option.textContent = `${code.name} (${code.dial_code})`;
+        datalist.appendChild(option);
+    });
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', loadCountryCodes);

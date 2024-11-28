@@ -6,54 +6,94 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Services\EmailService;
 use App\Models\Otp;
 
 class OtpController extends Controller
 {
+    protected $emailService;
+    // Inject MailService via constructor
+    public function __construct(EmailService $mailService)
+    {
+        $this->emailService = $mailService;
+    }
+
+
     public function sendOtp(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|digits_between:10,12',
+        $data = $request->validate([
+            'phone' => 'nullable|regex:/^\+\d{10,15}$/', // Matches phone numbers with country code
+            'email' => 'nullable|email',
         ]);
 
-        $phoneNumber = $request->input('phone');
-
-        // Add '91' prefix if phone length is 10
-        if (strlen($phoneNumber) === 10) {
-            $phoneNumber = '91' . $phoneNumber;
+        if (!isset($data['phone']) && !isset($data['email'])) {
+            return response()->json(['error' => 'Invalid input. Provide phone or email.'], 400);
         }
 
         // Generate OTP
         $otp = random_int(1000, 9999);
 
         try {
-            // Save OTP in MongoDB
-            Otp::updateOrCreate(
-                ['phone' => $phoneNumber],
-                [
-                    'otp' => $otp,
-                    'expires_at' => now()->addMinutes(5), //debug
-                ]
-            );
+            if (isset($data['phone'])) {
+                // Save OTP in MongoDB
+                Otp::updateOrCreate(
+                    ['phone' => $data['phone']],
+                    [
+                        'otp' => $otp,
+                        'expires_at' => now()->addMinutes(5), //debug
+                    ]
+                );
 
-            
-            // Base API URL
-            $baseUrl = "https://2factor.in/API/V1/";
+                // get delevery channel from body [sms | whatsapp]
+                $otpDeliveryChannel = $request->input('otpDeliveryChannel');
+                $otpDeliveryChannel = 'sms';
 
-            $template = "mverify";
-            $apiKey = env('TWO_FACTOR_API_KEY');
+                if ($otpDeliveryChannel == 'whatsapp') {
+                    // send otp via whatsapp 
+                } else {
+                    // Logic to send OTP to phone
+                    $baseUrl = "https://2factor.in/API/V1/";
 
-            $finalUrl = $baseUrl . urlencode($apiKey) . "/SMS/" . urlencode($phoneNumber) . "/" . urlencode($otp) . "/" . urlencode($template);
+                    $template = "mverify";
+                    $apiKey = env('TWO_FACTOR_API_KEY');
 
+                    $finalUrl = $baseUrl . urlencode($apiKey) . "/SMS/" . urlencode($data['phone']) . "/" . urlencode($otp) . "/" . urlencode($template);
 
-            // Send the request
-            $response = Http::post($finalUrl);
+                    // Send the request
+                    $response = Http::post($finalUrl);
+                    Log::info('2factor response: ' . $response);
+                }
 
-            if ($response->successful()) {
-                return response()->json(['message' => 'OTP sent successfully.', 'phone' => $phoneNumber], 200);
-            } else {
-                return response()->json(['error' => 'Failed to send OTP.'], 500);
-            } //debug
+                if ($response->successful()) {
+                    return response()->json(['message' => 'OTP sent successfully in SMS.', 'phoneOrEmail' => $data['phone']], 200);
+                } else {
+                    return response()->json(['error' => 'Failed to send OTP in SMS.'], 500);
+                }
+            }
+
+            if (isset($data['email'])) {
+                // Save OTP in MongoDB
+                Otp::updateOrCreate(
+                    ['phone' => $data['email']],
+                    [
+                        'otp' => $otp,
+                        'expires_at' => now()->addMinutes(5), //debug
+                    ]
+                );
+
+                // Send the OTP via email using MailService
+                $result = $this->emailService->sendEmail([
+                    'toAddress' => $data['email'],
+                    'subject' => 'Your OTP Code',
+                    'body' => "Your OTP is {$otp}. Please use this to complete your verification.",
+                ]);
+
+                if ($result === true) {
+                    return response()->json(['message' => 'OTP sent successfully on email.', 'phoneOrEmail' => $data['email']], 200);
+                } else {
+                    return response()->json(['error' => 'Failed to send OTP on email.'], 500);
+                }
+            }
             // return response()->json(['message' => 'OTP sent successfully.', 'phone' => $phoneNumber], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
@@ -65,17 +105,12 @@ class OtpController extends Controller
     {
         // Validate incoming request
         $request->validate([
-            'phone' => 'required|digits_between:10,12',
+            'phone' => 'required',
             'otp' => 'required|digits:4',
         ]);
 
         $phoneNumber = $request->input('phone');
         $otp = $request->input('otp');
-
-        // Add '91' prefix if phone length is 10
-        if (strlen($phoneNumber) === 10) {
-            $phoneNumber = '91' . $phoneNumber;
-        }
 
         // Find the OTP record for the given phone number
         $otpRecord = Otp::where('phone', $phoneNumber)->first();

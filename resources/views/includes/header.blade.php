@@ -194,26 +194,47 @@
                 <img src="{{ asset('images/cross-icon.png') }}" alt="Sign In Icon" class="sign-in-icon">
                 <h2 class="text-2xl font-bold">Sign In</h2>
             </div>
-            <input type="text" inputmode="numeric" maxlength="12" placeholder="Mobile" class="w-full p-2 mb-4 border text-gray-900 border-gray-300 rounded-md">
+            <!-- Country Code Input -->
+            <div class="flex items-center space-x-2 mb-4">
+                <input
+                    list="countryCodes"
+                    id="countryCodeInput"
+                    class="border border-gray-300 p-2 px-1 rounded-md bg-white text-gray-900 w-20"
+                    value="+91"
+                    placeholder="+91" />
+                <datalist id="countryCodes"></datalist>
+
+                <!-- Mobile Input -->
+                <input
+                    type="text"
+                    placeholder="Mobile or Email"
+                    id="mobileOrEmail"
+                    class="w-full p-2 border border-gray-300 rounded-md text-gray-900" />
+            </div>
+
+            <!-- OTP Delivery Method -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Receive OTP via:</label>
+                <div class="flex items-center space-x-4">
+                    <label class="border border-gray-500 rounded-md px-2 focus-within:bg-blue-950 focus-within:border-blue-700">
+                        <input type="radio" name="otpDeliveryChannel" value="sms" class="mr-2 accent-blue-600" checked>
+                        SMS
+                    </label>
+                    <label class="border border-gray-500 rounded-md px-2 focus-within:bg-blue-950 focus-within:border-blue-700">
+                        <input type="radio" name="otpDeliveryChannel" value="whatsapp" class="mr-2 accent-blue-600">
+                        WhatsApp
+                    </label>
+                </div>
+            </div>
+
             <button onclick="sendOTP(event)" class="bg-yellow-500 text-black w-full py-2 rounded-md disabled:text-gray-400 disabled:cursor-auto">Send OTP</button>
 
-            <!-- <div class="text-center mt-4">or</div>
-            <div class="text-center mt-4 font-bold" id="sign-in-with-text">Sign in with</div>
-            <div class="sso-icons">
-                <a href="{{ route('auth.google') }}" class="">
-                    <img src="{{ asset('images/google-logo.png') }}" alt="Google" class="sso-icon" id="google-logo">
-                </a>
-                <img src="{{ asset('images/zoho-logo.png') }}" onclick="zohoSso()" alt="Zoho" class="sso-icon" id="zoho-logo" style="width: 40px; height: 25px;">
-                <img src="{{ asset('images/yahoo-logo.png') }}" onclick="yahooSso()" alt="Yahoo" class="sso-icon" id="yahoo-logo">
-                <img src="{{ asset('images/apple-logo.png') }}" onclick="appleSso()" alt="Apple" class="sso-icon" id="apple-logo" style="width: 30px; height: 40px;">
-            </div> -->
             <div class="text-center mt-4">or</div>
             <div class="text-center mt-4">
                 <a href="https://mnivesh.investwell.app/app/#/login" class="text-white hover:underline">Sign in with password instead</a>
             </div>
-
         </div>
-        
+
         <div id="otpFields" class="hidden">
             <span class="modal-close" onclick="closeSignInModal()">&times;</span>
             <!-- Back Button (Mirror Image of Close Button) -->
@@ -233,4 +254,3 @@
         </div>
     </div>
 </div>
-</header>
