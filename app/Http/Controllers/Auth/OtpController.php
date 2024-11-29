@@ -8,16 +8,19 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Services\EmailService;
 use App\Models\Otp;
+use App\Services\WhatsappService;
 
 class OtpController extends Controller
 {
     protected $emailService;
-    // Inject MailService via constructor
-    public function __construct(EmailService $mailService)
-    {
-        $this->emailService = $mailService;
-    }
+    protected $whatsappService;
 
+    // Inject services via constructor
+    public function __construct(EmailService $emailService, WhatsappService $whatsappService)
+    {
+        $this->emailService = $emailService;
+        $this->whatsappService = $whatsappService;
+    }
 
     public function sendOtp(Request $request)
     {
@@ -40,16 +43,30 @@ class OtpController extends Controller
                     ['phone' => $data['phone']],
                     [
                         'otp' => $otp,
-                        'expires_at' => now()->addMinutes(5), //debug
+                        'expires_at' => now()->addMinutes(5),
                     ]
                 );
 
                 // get delevery channel from body [sms | whatsapp]
                 $otpDeliveryChannel = $request->input('otpDeliveryChannel');
-                $otpDeliveryChannel = 'sms';
 
                 if ($otpDeliveryChannel == 'whatsapp') {
                     // send otp via whatsapp 
+                    $parameters = [
+                        [
+                            'name' => '1',
+                            'value' => $otp
+                        ]
+                    ];
+
+                    $templateName = 'otp_send';
+                    $broadcastName = 'otp_send_291120241132';
+                    $messageSent = $this->whatsappService->sendWATemplateMessage($data['phone'], $parameters, $templateName, $broadcastName);
+                    if ($messageSent) {
+                        return response()->json(['message' => 'OTP sent successfully via Whatsapp.', 'phoneOrEmail' => $data['phone']], 200);
+                    } else {
+                        return response()->json(['error' => 'Failed to send OTP via Whatsapp.'], 500);
+                    }
                 } else {
                     // Logic to send OTP to phone
                     $baseUrl = "https://2factor.in/API/V1/";
@@ -62,13 +79,13 @@ class OtpController extends Controller
                     // Send the request
                     $response = Http::post($finalUrl);
                     Log::info('2factor response: ' . $response);
+                    if ($response->successful()) {
+                        return response()->json(['message' => 'OTP sent successfully in SMS.', 'phoneOrEmail' => $data['phone']], 200);
+                    } else {
+                        return response()->json(['error' => 'Failed to send OTP in SMS.'], 500);
+                    }
                 }
 
-                if ($response->successful()) {
-                    return response()->json(['message' => 'OTP sent successfully in SMS.', 'phoneOrEmail' => $data['phone']], 200);
-                } else {
-                    return response()->json(['error' => 'Failed to send OTP in SMS.'], 500);
-                }
             }
 
             if (isset($data['email'])) {
@@ -77,7 +94,7 @@ class OtpController extends Controller
                     ['phone' => $data['email']],
                     [
                         'otp' => $otp,
-                        'expires_at' => now()->addMinutes(5), //debug
+                        'expires_at' => now()->addMinutes(5),
                     ]
                 );
 

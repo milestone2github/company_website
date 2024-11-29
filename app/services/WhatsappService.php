@@ -1,6 +1,11 @@
 <?php
 
+namespace App\Services;
+
+use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class WhatsappService
 {
