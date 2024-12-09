@@ -103,19 +103,46 @@ class InvestwellController extends Controller
         }
     }
 
-    function getUsername($mobile)
+    public function getUsername($mobile)
     {
+        if (str_starts_with($mobile, '+')) {
+            $mobile = ltrim($mobile, '+');
+        }
+        
         try {
-            // Query the MongoDB collection
-            $user = DB::connection('mongodb')->collection('MintDb')->where('MOBILE', $mobile)->first();
+            // Exceptional case for "9996006952" 
+            if ($mobile == "919996006952") {
+                throw new Exception("User not allowed");
+            }
 
-            // Check if the user exists
-            if (!$user) {
+            // Query the MongoDB collection for all documents with the given mobile
+            $users = DB::connection('mongodb')->collection('MintDb')->where('MOBILE', $mobile)->get();
+
+            // Check if any users exist with the given mobile
+            if ($users->isEmpty()) {
                 throw new \Exception('User not found');
             }
 
-            // Return the username
-            return $user['USERNAME'] ?? null;
+            // If more than one document exists, find the first document where NAME == FAMILY HEAD
+            if ($users->count() > 1) {
+                $matchedUser = DB::connection('mongodb')->collection('MintDb')
+                    ->where('MOBILE', $mobile)
+                    ->whereRaw([
+                        '$expr' => [
+                            '$eq' => ['$NAME', '$FAMILY HEAD']
+                        ]
+                    ])
+                    ->first();
+
+                // Return the username from the matched document if found
+                if ($matchedUser) {
+                    return $matchedUser['USERNAME'] ?? null;
+                }
+            }
+
+            // If only one document exists or no match on NAME == FAMILY HEAD, return the first document's username
+            $firstUser = $users->first();
+            return $firstUser['USERNAME'] ?? null;
         } catch (\Exception $e) {
             // Re-throw or handle the exception
             throw new \Exception($e->getMessage());
