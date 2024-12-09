@@ -83,8 +83,8 @@ function closeSignInModal() {
 async function sendOTP(e) {
     try {
         // remove existing phone stored in localStorage 
-        if(localStorage.getItem('phone')) localStorage.removeItem('phone');
-        if(localStorage.getItem('otpDelChnl')) localStorage.removeItem('otpDelChnl');
+        if (localStorage.getItem('phone')) localStorage.removeItem('phone');
+        if (localStorage.getItem('otpDelChnl')) localStorage.removeItem('otpDelChnl');
 
         // Get the input value
         const input = document.getElementById('mobileOrEmail').value.trim();
@@ -458,22 +458,127 @@ async function loadCountryCodes() {
         }
 
         const countryCodes = await response.json();
-        populateCountryCodeDatalist(countryCodes);
+        populateCountryCodesDropdown(countryCodes);
+        setupSearchFeature(countryCodes);
     } catch (error) {
         console.error('Error loading country codes:', error);
     }
 }
 
-// Populate the datalist with country codes
-function populateCountryCodeDatalist(codes) {
-    const datalist = document.getElementById('countryCodes');
+// Populate the dropdown with country codes
+function populateCountryCodesDropdown(codes) {
+    const dropdown = document.getElementById('countryCodesDropdown');
+    dropdown.innerHTML = ''; // Clear existing options
+
     codes.forEach(code => {
-        const option = document.createElement('option');
-        option.value = code.dial_code;
+        const option = document.createElement('div');
+        option.className = 'p-2 text-gray-800 hover:bg-gray-100 cursor-pointer';
         option.textContent = `${code.name} (${code.dial_code})`;
-        datalist.appendChild(option);
+        option.setAttribute('data-value', code.dial_code);
+
+        // Add click event listener
+        option.addEventListener('click', () => {
+            const input = document.getElementById('countryCodeInput');
+            input.value = code.dial_code; // Set the selected value
+            input.blur();
+            dropdown.classList.add('hidden'); // Hide the dropdown
+        });
+
+        dropdown.appendChild(option);
+    });
+}
+
+// Setup search feature for the input
+function setupSearchFeature(codes) {
+    const input = document.getElementById('countryCodeInput');
+    const dropdown = document.getElementById('countryCodesDropdown');
+
+    // Show dropdown on input focus
+    input.addEventListener('focus', () => {
+        dropdown.classList.remove('hidden');
+    });
+
+    // Filter dropdown options as the user types
+    input.addEventListener('input', () => {
+        const searchTerm = input.value.toLowerCase();
+        dropdown.innerHTML = ''; // Clear existing options
+
+        const filteredCodes = codes.filter(code =>
+            `${code.name} (${code.dial_code})`.toLowerCase().includes(searchTerm)
+        );
+
+        if (filteredCodes.length > 0) {
+            filteredCodes.forEach(code => {
+                const option = document.createElement('div');
+                option.className = 'p-2 text-gray-800 hover:bg-gray-100 cursor-pointer';
+                option.textContent = `${code.name} (${code.dial_code})`;
+                option.setAttribute('data-value', code.dial_code);
+
+                // Add click event listener
+                option.addEventListener('click', () => {
+                    input.value = code.dial_code; // Set the selected value
+                    input.blur();
+                    dropdown.classList.add('hidden'); // Hide the dropdown
+                });
+
+                dropdown.appendChild(option);
+            });
+        } else {
+            const noResults = document.createElement('div');
+            noResults.className = 'p-2 text-gray-500';
+            noResults.textContent = 'No results found';
+            dropdown.appendChild(noResults);
+        }
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    dropdown.addEventListener('mousedown', (event) => {
+        event.preventDefault();
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!dropdown.contains(event.target) && event.target !== input) {
+            dropdown.classList.add('hidden');
+        }
     });
 }
 
 // Call the function when the page loads
 document.addEventListener('DOMContentLoaded', loadCountryCodes);
+
+
+
+// otp delevery channel labels styling 
+document.addEventListener('DOMContentLoaded', function () {
+    const radioInputs = document.querySelectorAll('input[name="otpDeliveryChannel"]');
+    const labels = document.querySelectorAll('.delivery-channel-labels');
+
+    function updateCheckedLabel() {
+        labels.forEach(label => {
+            label.classList.remove('bg-green-900')
+            label.classList.remove('border-green-600')
+            label.classList.add('border-gray-500');
+        }); // Remove background from all labels
+
+        radioInputs.forEach(input => {
+            if (input.checked) {
+                const label = input.closest('.delivery-channel-labels');
+                if (label) {
+                    label.classList.remove('border-gray-500');
+                    label.classList.add('bg-green-900'); // Add background to the checked input's label
+                    label.classList.add('border-green-600'); // Add background to the checked input's label
+                }
+            }
+        });
+    }
+
+    // Run initially to set the correct background for the default checked input
+    updateCheckedLabel();
+
+    // Add event listener to each radio button to update background on change
+    radioInputs.forEach(input => {
+        input.addEventListener('change', updateCheckedLabel);
+    });
+});
+

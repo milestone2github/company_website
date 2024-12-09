@@ -195,33 +195,38 @@
                 <h2 class="text-2xl font-bold">Sign In</h2>
             </div>
             <!-- Country Code Input -->
-            <div class="flex items-center space-x-2 mb-4">
-                <input
-                    list="countryCodes"
-                    id="countryCodeInput"
-                    class="border border-gray-300 p-2 px-1 rounded-md bg-white text-gray-900 w-20"
-                    value="+91"
-                    placeholder="+91" />
-                <datalist id="countryCodes"></datalist>
+            <div class="flex items-center space-x-0 mb-4 relative">
+                <!-- Country Code Dropdown -->
+                <div class="relative w-24">
+                    <input
+                        id="countryCodeInput"
+                        class="border border-gray-300 p-2 px-1 rounded-s-md bg-white text-gray-900 w-full cursor-pointer"
+                        value="+91"
+                        placeholder="+91"
+                        autocomplete="off" />
+                    <div id="countryCodesDropdown" class="absolute hidden w-44 rounded-md bg-white border border-gray-300 mt-1 max-h-40 overflow-y-auto z-10 shadow-lg">
+                        <!-- Country code options will be populated here -->
+                    </div>
+                </div>
 
                 <!-- Mobile Input -->
                 <input
                     type="text"
                     placeholder="Mobile or Email"
                     id="mobileOrEmail"
-                    class="w-full p-2 border border-gray-300 rounded-md text-gray-900" />
+                    class="w-full p-2 border border-gray-300 rounded-e-md text-gray-900" />
             </div>
 
             <!-- OTP Delivery Method -->
-            <div class="mb-4">
+            <div class="mb-8">
                 <label class="block text-sm font-medium text-gray-300 mb-2">Receive OTP via:</label>
                 <div class="flex items-center space-x-4">
-                    <label class="border border-gray-500 rounded-md px-2 focus-within:bg-blue-950 focus-within:border-blue-700">
-                        <input type="radio" name="otpDeliveryChannel" value="sms" class="mr-2 accent-blue-600" checked>
+                    <label class="delivery-channel-labels relative text-center border border-gray-500 rounded-md py-1 px-2 w-full">
+                        <input type="radio" name="otpDeliveryChannel" value="sms" class="absolute invisible accent-blue-600" checked>
                         SMS
                     </label>
-                    <label class="border border-gray-500 rounded-md px-2 focus-within:bg-blue-950 focus-within:border-blue-700">
-                        <input type="radio" name="otpDeliveryChannel" value="whatsapp" class="mr-2 accent-blue-600">
+                    <label class="delivery-channel-labels relative text-center border border-gray-500 rounded-md py-1 px-2 w-full focus-within:bg-blue-950 focus-within:border-blue-700">
+                        <input type="radio" name="otpDeliveryChannel" value="whatsapp" class="absolute invisible accent-blue-600">
                         WhatsApp
                     </label>
                 </div>
