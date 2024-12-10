@@ -457,7 +457,6 @@
             async function loadOfferings() {
                 const response = await fetch('/api/offerings');
                 const offerings = await response.json();
-                // console.log('offerings: ', offerings)
                 const offeringsContainer = document.getElementById("offering-container");
                 offeringsContainer.innerHTML = ''; // Clear existing entries
                 offerings.forEach(offering => {
@@ -485,9 +484,9 @@
 
             function highlightItem(item) {
                 document.querySelectorAll('.offerings-grid-item').forEach(offer => {
-                    offer.classList.remove('highlighted');
+                    offer.classList.remove('highlighted'); // Remove 'highlighted' from all items
                 });
-                item.classList.add('highlighted');
+                item.classList.add('highlighted'); // Add 'highlighted' to the active item
             }
 
             function updateDynamicContent(item) {
@@ -508,19 +507,22 @@
             function highlightInitialOffering() {
                 const firstOffering = document.querySelector('.offerings-grid-item');
                 if (firstOffering) {
-                    firstOffering.click(); // Trigger click to set initial content
+                    highlightItem(firstOffering); // Highlight initial offering
+                    updateDynamicContent(firstOffering); // Update content for the initial offering
                 }
             }
 
             function startAutomaticHighlighting() {
                 let index = 0;
                 const offerings = document.querySelectorAll('.offerings-grid-item');
-                highlightInterval = setInterval(() => {
-                    offerings[index % offerings.length].click();
+                setInterval(() => {
+                    highlightItem(offerings[index % offerings.length]); // Highlight the current offering
+                    updateDynamicContent(offerings[index % offerings.length]); // Update dynamic content
                     index++;
                 }, 5000); // Highlight next item every 5 seconds
             }
         });
+
 
         // Load blogs dynamically
         async function loadBlogs() {
@@ -575,8 +577,6 @@
                 magazineContainer.prepend(magazinecard);
             });
         }
-
-
 
 
         document.addEventListener("DOMContentLoaded", function() {

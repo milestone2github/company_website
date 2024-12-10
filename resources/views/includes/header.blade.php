@@ -204,7 +204,7 @@
                         value="+91"
                         placeholder="+91"
                         autocomplete="off" />
-                    <div id="countryCodesDropdown" class="absolute hidden w-44 rounded-md bg-white border border-gray-300 mt-1 max-h-40 overflow-y-auto z-10 shadow-lg">
+                    <div id="countryCodesDropdown" class="absolute hidden w-44 rounded-md bg-white border border-gray-300 mt-1 max-h-48 overflow-y-auto z-10 shadow-lg">
                         <!-- Country code options will be populated here -->
                     </div>
                 </div>
